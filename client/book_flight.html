@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Booking</title>
+        <link rel = "stylesheet" href = "index.css">
+    </head>
+    <body>
+        <h3> Book your flight </h3>
+        <!---Browse Flights-->
+        <div class = "browse_flights" id = "browse">
+            <button> Browse available flights</button>
+        </div>
+
+
+        <!------Search for flights-->
+        <div class = "search_flight" id = "search">
+            <input type="text" class="search-input" placeholder="Origin" id="origin_city">
+            <input type="text" class="search-input" placeholder="Destination" id="destination_city">
+            Connection:
+            <input type="checkbox" class = "search-input"  id = "conn">
+            <input type="number" class="search-input" placeholder="no of passengers" id="pass_no">
+            <div class="input-group-append">
+              <button class="search_btn" type="button" onclick="search()">Search</button>
+            </div>
+            
+        </div>
+        <div>
+            <table class="table mt-5 text-center" id="avflight-list">
+                <!--<thead>
+                  <tr>
+                    <th>Description</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                add av-flights in tbody by modying the HTML in main.js -->
+                <tbody id="avflight-table">
+                </tbody>
+              </table>
+        </div>
+
+        <li><a href = "index.html">return to Main</a></li>
+    </body>
+    <script src="book.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</html>

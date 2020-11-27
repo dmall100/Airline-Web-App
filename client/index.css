@@ -1,0 +1,19 @@
+img {
+    max-width: 30%;
+    max-height: 30%;
+}
+
+html {
+    background-color:  #d90000;
+}
+ul {
+    background-color:  #d90000;
+}
+
+button {
+    cursor: pointer; 
+}
+.search_btn {
+    color : #d90000; 
+    background-color : white;
+}
