@@ -1,7 +1,8 @@
 
-let avflights = []
+let flights = []
+let chosen_flight = [];
 const setflights= (data) => {
-  avflights = data;
+  flights = data;
 }
 
 async function search() {
@@ -17,20 +18,56 @@ async function search() {
   try {
 
     // insert new avflight to "http://localhost:5000/avflights", with "POST" method
-    const response = await fetch("http://localhost:1385/avflights");
+    const response = await fetch("http://localhost:1385/flights");
     const jsonData = await response.json();
-    // refresh the page when inserted
-    setflights(jsonData)
-    displayavflights();
-    document.body.innerHTML += `<br><tbody>${avflights[0].origin}</tbody></br>`;
-    //location.reload();
+    console.log(jsonData)
+    for(var i = 0; i < 1;i++){
+       setflights(jsonData);
+       displayflights();
+    }
 
   } catch (err) {
     console.log(err.message);
   }
 }
 
-const displayavflights = () => {
+async function insert_pass() {
+  const name = document.querySelector("#pass-name").value;
+
+  try {
+    const body = {name: name}
+    const response = await fetch("http://localhost:1385/flights", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    location.reload();
+  } catch(err) {
+    console.log(err.message)
+  }
+}
+const displayflights = () => {
   
+  const flightsTable = document.querySelector('#flights-table');
+
+  // display all todos by modifying the HTML in "todo-table"
+  let tableHTML = "";
+  flights.map(flight =>{
+    tableHTML +=
+    `<tr>
+    <th>${flight.departure_city}</th>
+    <th> $${flight.scheduled_departure}</th>
+    <th>${flight.arrival_city}</th>
+    <th> $${flight.scheduled_arrival}</th>
+    <th> <button onclick =  "chooseflight(${flight});location.href = 'costumer_info.html';"> select </button></th>
+    </tr>`;
+  })
+  flightsTable.innerHTML = tableHTML;
+}
+
+const chooseflight = (data) => {
+  chosen_flight = data;
+  const flight_info = document.querySelector('#flight-info');
+  flight_info.innerHTML =`<h3> ${chosen_flight.departure_city}</h3>` ;
 
 }
