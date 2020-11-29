@@ -11,22 +11,44 @@ app.use(express.json());      //req.body
 
 
 
-//get all todo
+//get all flights
 app.get('/flights', async(req, res)=>{
   try{
     console.log("HERE");
+    const no_ticket = req.body; 
+    console.log("no is");
+    const avflight = await pool.query(`
+      SELECT *, A.city AS arrival_city, D.city AS departure_city 
+      FROM flights AS F
+      INNER JOIN 
+      airport AS D
+      on F.departure_airport = D.airport_code
+      INNER JOIN
+      airport As A
+      on arrival_airport = A.airport_code`
+     );
+    res.json(avflight.rows);
+  } catch(err){
+    console.log(err.message);
+  }
+});
+
+//get flights depending on availability 
+app.get('/flights/:id', async(req, res)=>{
+  try{
+    const {id} = req.params; 
     const avflight = await pool.query(`
         SELECT *, A.city AS arrival_city, D.city AS departure_city 
         FROM flights AS F
         INNER JOIN 
         airport AS D
         on F.departure_airport = D.airport_code
-        INNER JOIN 
+        INNER JOIN
         airport As A
-        on arrival_airport = A.airport_code;
+        on arrival_airport = A.airport_code
+        WHERE seats_available >= $1;`, [id]
 
-    `);
-    console.log(avflight.rows);
+    );
     res.json(avflight.rows);
   } catch(err){
     console.log(err.message);

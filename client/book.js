@@ -5,7 +5,23 @@ const setflights= (data) => {
   flights = data;
 }
 
+async function check_avflights(){
+  return false; 
+}
 async function browse() {
+  const id = document.querySelector("#b_no_ticket").value;
+  try {
+    const response = await fetch(`http://localhost:1385/flights/${id}`);
+    const jsonData = await response.json();
+    setflights(jsonData);
+    displayflights();
+    return false; 
+  } catch (err) {
+    console.log(err.message);
+  }
+  //CHECK IF NUMBER OF TICKETS AVAILABLE 
+  //If available --> display 
+  //if no available --> alert user 
   // read the avflight description from input
   //const origin = document.querySelector('#origin_city').value;
   //const destination = document.querySelector('#destination_city').value;
@@ -14,24 +30,10 @@ async function browse() {
   //console.log(origin);-->
 
   // use try... catch... to catch error
-  try {
-    // insert new avflight to "http://localhost:5000/avflights", with "POST" method
-    const response = await fetch("http://localhost:1385/flights");
-    const jsonData = await response.json();
-    console.log(jsonData)
-    for(var i = 0; i < 1;i++){
-       setflights(jsonData);
-       displayflights();
-    }
-    return false; 
-  } catch (err) {
-    console.log(err.message);
-  }
 }
 
 async function insert_pass() {
   const name = document.querySelector("#pass-name").value;
-
   try {
     const body = {name: name}
     const response = await fetch("http://localhost:1385/flights", {
@@ -45,22 +47,28 @@ async function insert_pass() {
   }
 }
 const displayflights = () => {
-  
-  const flightsTable = document.querySelector('#flights-table');
+  if(flights.length > 0)
+  {
+    const flightsTable = document.querySelector('#flights-table');
 
-  // display all todos by modifying the HTML in "todo-table"
-  let tableHTML = "";
-  flights.map(flight =>{
-    tableHTML +=
-    `<tr>
-    <th>${flight.departure_city}</th>
-    <th> $${flight.scheduled_departure}</th>
-    <th>${flight.arrival_city}</th>
-    <th> $${flight.scheduled_arrival}</th>
-    <th> <button onclick =  "location.href = 'costumer_info.html'; chooseflight('${flight.value}'); return false;"> select </button></th>
+    let tableHTML = "";
+    flights.map(flight =>{
+      tableHTML +=
+      `<tr>
+      <th>${flight.departure_city}</th>
+      <th> $${flight.scheduled_departure}</th>
+      <th>${flight.arrival_city}</th>
+      <th> $${flight.scheduled_arrival}</th>
+      <th> <button onclick =  "location.href = 'costumer_info.html'; chooseflight('${flight.value}'); return false;"> select </button></th>
     </tr>`;
-  })
-  flightsTable.innerHTML = tableHTML;
+    })
+    flightsTable.innerHTML = tableHTML;
+  }
+  else{
+    const flightsTable = document.querySelector('#flights-table');
+    flightsTable.innerHTML = '<tr> No available flights </tr>';
+  }
+  
 }
 
 const chooseflight = (data) => {
