@@ -1,12 +1,11 @@
 
-let flights = []
-let chosen_flight = 0;
+let flights = [];
+let chosen_flight = [];
 const setflights= (data) => {
   flights = data;
 }
 
-async function search() {
-  console.log("#searching")
+async function browse() {
   // read the avflight description from input
   //const origin = document.querySelector('#origin_city').value;
   //const destination = document.querySelector('#destination_city').value;
@@ -16,7 +15,6 @@ async function search() {
 
   // use try... catch... to catch error
   try {
-
     // insert new avflight to "http://localhost:5000/avflights", with "POST" method
     const response = await fetch("http://localhost:1385/flights");
     const jsonData = await response.json();
@@ -25,7 +23,7 @@ async function search() {
        setflights(jsonData);
        displayflights();
     }
-
+    return false; 
   } catch (err) {
     console.log(err.message);
   }
@@ -59,7 +57,7 @@ const displayflights = () => {
     <th> $${flight.scheduled_departure}</th>
     <th>${flight.arrival_city}</th>
     <th> $${flight.scheduled_arrival}</th>
-    <th> <button onclick =  "chooseflight('${flight.value}'); return false;"> select </button></th>
+    <th> <button onclick =  "location.href = 'costumer_info.html'; chooseflight('${flight.value}'); return false;"> select </button></th>
     </tr>`;
   })
   flightsTable.innerHTML = tableHTML;
@@ -68,9 +66,10 @@ const displayflights = () => {
 const chooseflight = (data) => {
   chosen_flight = data;
   //check flight availability 
-  location.href = 'costumer_info.html';
   const flight_info = document.querySelector('#flight-info');
   //location.reload();
-  flight_info.innerHTML =`<h3> ${data.flight_id}</h3>` ;
+  document.getElementById("flight-info").innerHTML =`${data.flight_id}` ;
+  
+
 
 }

@@ -4,18 +4,29 @@ img {
 }
 
 html {
-    background-color:  #d90000;
+    background-color: white;
 }
 ul {
     background-color:  #d90000;
 }
 
-button {
-    cursor: pointer; 
+.btn-home {
+    background-color : #d90000; 
+    color : white; 
 }
-.search_btn {
-    color : #d90000; 
-    background-color : white;
+
+h2 {
+    color: #d90000;
+    position: inherit;
+}
+
+h4 {
+    padding-top: 30px;
+}
+.btn-book-search {
+    cursor: pointer; 
+    background-color:#d90000 ;
+    color: white;
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
     background: transparent;
@@ -24,7 +35,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     height: auto;
     left: 0;
-    position: absolute;
     right: 0;
     top: 0;
     width: auto;
