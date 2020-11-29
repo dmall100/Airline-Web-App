@@ -27,13 +27,13 @@
     <!-- Back button -->
     <li><a href="index.html">return to Main</a></li>
 
-    <!-- dynamic table to display todo list -->
+    <!-- dynamic table to display flight list -->
     <table class="table mt-5 text-center" id="flights-list">
         <thead>
             <tr>
                 <th>Flight</th>
-                <th>Departure</th>
-                <th>Arrival</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
                 <th>Departure Airport</th>
                 <th>Arrival Airport</th>
                 <th>Aircraft</th>
@@ -41,14 +41,14 @@
                 <th>Booked Seats</th>
             </tr>
         </thead>
-        <!-- add todos in tbody by modying the HTML in main.js -->
+        <!-- add flights in tbody by modying the HTML in flights.js -->
         <tbody id="flights-table">
         </tbody>
     </table>
 
     <!-- the popup modal, use for displaying seats and passengers hopefully -->
     <div class="modal fade" id="flight-info" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="width:1250px">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="passenger-view-label">Passenger Information</h5>
@@ -57,7 +57,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Some text in the modal.</p>
+                    <table id="classTable" class="table table-bordered">
+                        <thead>
+                            <td>Seat</td>
+                            <td>Passenger Name</td>
+                        </thead>
+                        <!-- add passengers in tbody by modying the HTML in flights.js -->
+                        <tbody id="passengers-table">
+                        </tbody>
+                      </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

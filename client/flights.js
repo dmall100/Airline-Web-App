@@ -1,41 +1,20 @@
 
 let list_flights = []
+let list_passengers = []
 
 const setFlights= (data) => {
   list_flights = data;
 }
 
-/* async function list_flights() {
-  console.log("#searching")
-
-  // use try... catch... to catch error
-  try {
-
-    // insert new avflight to "http://localhost:1385/avflights", with "POST" method
-    const response = await fetch("http://localhost:1385/listflights");
-    const jsonData = await response.json();
-    // refresh the page when inserted
-    setflights(jsonData)
-    displayavflights();
-    document.body.innerHTML += `<br><tbody>${avflights[0].origin}</tbody></br>`;
-    //location.reload();
-
-  } catch (err) {
-    console.log(err.message);
-  }
-} */
-
-const passenger_info = (id) => {
-
-  console.log(id);
-
+const setPassengers = (data) => {
+  list_passengers = data;
 }
 
-// function to display todos
+// function to display flights
 const displayFlights = () => {
   const flightsTable = document.querySelector('#flights-table');
 
-  // display all todos by modifying the HTML in "todo-table"
+  // display all flights by modifying the HTML in "flights-table"
   let tableHTML = "";
   list_flights.map(flights =>{
     tableHTML +=
@@ -48,11 +27,26 @@ const displayFlights = () => {
     <th>${flights.aircraft_code}</th>
     <th>${flights.seats_available}</th>
     <th>${flights.seats_booked}</th>
-    <th><button class="btn btn-warning" type="button" data-toggle="modal" data-target="#flight-info" >Info</button></th>
+    <th><button class="btn btn-warning" type="button" data-toggle="modal" data-target="#flight-info" onclick="selectPassengers(${flights.aircraft_code})">Info</button></th>
     </tr>`;
   })
   flightsTable.innerHTML = tableHTML;
-  //onclick="passenger_info(${flights.flight_id})"
+}
+
+// function to display passengers
+const displayPassengers = () => {
+  const passengersTable = document.querySelector('#passengers-table');
+
+  // display all flights by modifying the HTML in "passengers-table"
+  list_passengers.map(flights =>{
+    tableHTML +=
+    `<tr key=${flights.aircraft_code}>
+    <th>${flights.flight_id}</th>
+    <th>${flights.departure_airport}</th>
+    <th> Test </th>
+    </tr>`;
+  })
+  passengersTable.innerHTML = tableHTML;
 }
 
 selectFlights();
@@ -69,6 +63,23 @@ async function selectFlights() {
 
     setFlights(jsonData);
     displayFlights();
+
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+// select all the passengers
+async function selectPassengers(code) {
+  // use try... catch... to catch error
+  try {
+    
+    // GET all passengers from "http://localhost:1385/list_flights/${code}"
+    const response = await fetch("http://localhost:1385/list_flights/${code}")
+    const jsonData = await response.json();
+
+    setPassengers(jsonData);
+    displayPassengers();
 
   } catch (err) {
     console.log(err.message);

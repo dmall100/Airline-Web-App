@@ -37,7 +37,7 @@ app.post('/flights', async(req,res)=>{
   try{
     const {name} = req.body;
     const newTodo = await pool.query(`INSERT INTO booking (name) VALUES($1) returning *`,[name]);
-    console.log(newTodo)
+    //console.log(newTodo)
     res.json(newTodo);  
   }catch(err){
     console.log(err.message);
@@ -49,8 +49,30 @@ app.post('/flights', async(req,res)=>{
 app.get('/list_flights', async(req, res)=>{
   try{
     const getflights = await pool.query(`SELECT * FROM flights WHERE seats_available > 0`);
-    console.log(getflights.rows);
+    //console.log(getflights.rows);
     res.json(getflights.rows);
+  } catch(err){
+    console.log(err.message);
+  }
+});
+
+//get all passengers on a flight
+app.get('/list_flights/:code', async(req, res)=>{
+  try{
+    const { code } = req.params;
+    const getpassengers = await pool.query(`
+        SELECT passenger_name, seat_no 
+        FROM ticket a 
+        NATURAL JOIN 
+        boarding_passes b
+        NATURAL JOIN
+        seats c
+        WHERE a.ticket_no=b.ticket_no
+        AND
+        aircraft_code LIKE $1
+        `, [code]);
+    //console.log(getpassengers.rows);
+    res.json(getpassengers.rows);
   } catch(err){
     console.log(err.message);
   }

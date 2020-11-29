@@ -46,6 +46,7 @@ async function insert_pass() {
     console.log(err.message)
   }
 }
+
 const displayflights = () => {
   
   const flightsTable = document.querySelector('#flights-table');
