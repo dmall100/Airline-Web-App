@@ -5,12 +5,21 @@
         <link rel = "stylesheet" href = "index.css">
     </head>
     <body>
-        <div>
-            <h3 id = "flight-info"></h3>
-        </div>
+        <h3 id = "flight-info"> hii </h3>
         <div class = "input-pass">
-            <input type = "text" placeholder="Name" id = "pass-name">
-            <input type = "text" placeholder="Name" id = "pass-origin">
+            <h4>Information </h4>
+            <div> 
+                <input type = "text" placeholder="First Name" id = "pass-name">
+                <input type = "text" placeholder="Last Name" id = "pass-origin">
+                <input type = "date" placeholder = "mm-dd-yyyy" id = "pass-dob" >
+            </div>
+            <h4> Identification </h4>
+            <div> 
+                <input type = "text" placeholder="Identification Number" id = "pass-name">
+                <input type = "text" placeholder="Country of Issue" id = "pass-origin">
+                <input type = "date" placeholder = "mm-dd-yyyy" id = "pass-dob" > 
+            </div>
+             
             <div>
                 <button class = insert-pass onclick = insert_pass()> continue</button>
             </div>

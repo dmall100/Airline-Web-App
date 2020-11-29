@@ -1,6 +1,6 @@
 
 let flights = []
-let chosen_flight = [];
+let chosen_flight = 0;
 const setflights= (data) => {
   flights = data;
 }
@@ -59,7 +59,7 @@ const displayflights = () => {
     <th> $${flight.scheduled_departure}</th>
     <th>${flight.arrival_city}</th>
     <th> $${flight.scheduled_arrival}</th>
-    <th> <button onclick =  "chooseflight(${flight});location.href = 'costumer_info.html';"> select </button></th>
+    <th> <button onclick =  "chooseflight('${flight.value}'); return false;"> select </button></th>
     </tr>`;
   })
   flightsTable.innerHTML = tableHTML;
@@ -67,7 +67,10 @@ const displayflights = () => {
 
 const chooseflight = (data) => {
   chosen_flight = data;
+  //check flight availability 
+  location.href = 'costumer_info.html';
   const flight_info = document.querySelector('#flight-info');
-  flight_info.innerHTML =`<h3> ${chosen_flight.departure_city}</h3>` ;
+  //location.reload();
+  flight_info.innerHTML =`<h3> ${data.flight_id}</h3>` ;
 
 }
