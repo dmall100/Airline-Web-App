@@ -58,7 +58,7 @@ const displayFlights = () => {
 selectFlights();
 
 // The following are async function to select, insert, update and delete todos
-// select all the todosaa
+// select all the todos
 async function selectFlights() {
   // use try... catch... to catch error
   try {
