@@ -1,4 +1,55 @@
 
+
+world = [] // country, city list 
+const setworld = (data) => {
+  world = data; 
+}
+GetWorld(); 
+async function GetWorld(){
+  try{
+    const response = await fetch(`http://localhost:1385/world_list`);
+    const jsonData = await response.json();
+    setworld(jsonData);
+    setoptions();
+    const optionsList = document.querySelectorAll(".option");
+
+
+
+    optionsList.forEach(o => {
+    o.addEventListener("click", () => {
+    
+    selected.innerHTML = o.querySelector("label").innerHTML;
+    
+
+    optionsContainer.classList.remove("active");
+    });
+    return false; 
+});
+  }catch(err){
+    console.log(err.message)
+  }
+}
+const selected = document.querySelector(".selected");
+const optionsContainer = document.querySelector(".options-container");
+selected.addEventListener("click", () => {
+  optionsContainer.classList.toggle("active");
+});
+
+
+const setoptions = () => {
+  world.forEach(w => {
+    optionsContainer.innerHTML += `<div class = "option">
+    <input 
+    type = "radio"
+    class = radio 
+    id = "${w.city_id}"
+    name = "category"/> 
+    <label for="d_city"> ${w.city}, ${w.country} </label>
+    </div>`;
+  });
+  
+}
+
 let flights = [];
 let chosen_flight = [];
 let no_ticket = 1;

@@ -8,8 +8,18 @@ app.use(cors());
 app.use(express.json());      //req.body
 
 //ROUTES
-
-
+//Get world list 
+app.get('/world_list', async(req, res)=>{
+  try{
+    const world_list = await pool.query(`
+      SELECT * FROM location;`
+     );
+    console.log(world_list.rows);
+    res.json(world_list.rows);
+  } catch(err){
+    console.log(err.message);
+  }
+});
 
 //get all flights
 app.get('/flights', async(req, res)=>{
@@ -67,12 +77,32 @@ app.get('/flights/:id', async(req, res)=>{
 app.get('/flights/:id/:a_city', async(req, res)=>{
   try{
     const {id} = req.params; 
-    let {a_city} = req.params; 
-    a_city[0] = ""; 
-    a_city = `%${a_city}%`;
-    const avflight = await pool.query('SELECT * FROM(SELECT *, A.city_id AS a_city_id, D.city_id AS d_city_id FROM flights AS F INNER JOIN airport AS D on F.departure_airport = D.airport_code INNER JOIN airport As A on arrival_airport = A.airport_code WHERE seats_available >= $1) AS B WHERE B.arrival_city like LOWER($2);', [id,a_city]);
+    const {a_city} = req.params; 
+    const avflight = await pool.query(`
+    SELECT * 
+    FROM(
+      SELECT *, lD.city as departure_city, lA.city as arrival_city
+    FROM 
+    (
+      SELECT *, A.city_id AS a_city_id, D.city_id AS d_city_id 
+      FROM flights AS F
+      INNER JOIN 
+      airport AS D
+      on F.departure_airport = D.airport_code
+      INNER JOIN
+      airport As A
+      on arrival_airport = A.airport_code
+    ) B
+    INNER JOIN 
+    location AS lD
+    on B.d_city_id = lD.city_id
+    INNER JOIN 
+    location AS lA
+    on B.a_city_id = lA.city_id
+    WHERE seats_available >= $1
+    ) AS F
+    WHERE a_city_id = $2;`, [id,a_city]);
     console.log(avflight.rows);
-    console.log("SELECT * FROM(SELECT *, A.city AS arrival_city, D.city AS departure_city FROM flights AS F INNER JOIN airport AS D on F.departure_airport = D.airport_code INNER JOIN airport As A on arrival_airport = A.airport_code WHERE seats_available >= $1) AS B WHERE B.arrival_city like $2", [id,a_city]);
     res.json( avflight.rows);
   } catch(err){
     console.log(err.message);

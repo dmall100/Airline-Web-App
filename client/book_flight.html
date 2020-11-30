@@ -10,27 +10,37 @@
 
         <!---Browse Flights-->
         
-        <div class = "search_flights"> 
-          <div>
-            <h4> Search Available Flights </h4>
-            <input type = "text" placeholder=" Origin " id = "d_city">
-            <input type = "text" placeholder=" Destination " id = "a_city">
+        <div class = "container"> 
+          <h4> Search Available Flights </h4>
+          <div class = "select-box">
+            <div class = options-container>
+            </div>
+            <div class = "selected" id = "origin-def">
+              Origin
+            </div>
           </div>
-          <div>
+          <div class = "select-box">
             <input type = "date" placeholder = "mm-dd-yyyy" id = "d_date" >
+          </div>
+          <div class = "select-box">
+            <div class = "options-container" id = "D-op">
+            </div>
+            <div class = "selected">
+              Destination
+            </div>
+          </div>
+          <div class = "select-box">
             <input type = "date" placeholder = "mm-dd-yyyy" id = "a_date" >
           </div>
-          <div class = "browse_flights">
+          <div class = "select-box">
             <input class = "user-input" type = "number" placeholder="No Tickets" id = "s_no_ticket" >
             <button class="btn-book-search" type="button" onclick="search()">Search</button>
           </div>
-        </div>
-        <div class = "browse_flights">
-            <h4> Browse Available Flights </h4>
-            <input class = "user-input" type = "number" placeholder="No Tickets" id = "b_no_ticket" value = 1>
-            <button class="btn-book-search" type="button" onclick="browse()">Browse</button>
-        </div>
-        <div> 
+          </div>
+          <div class = "container">
+          <h4> Browse Available Flights </h4>
+          <input class = "user-input" type = "number" placeholder="No Tickets" id = "b_no_ticket" value = 1>
+          <button class="btn-book-search" type="button" onclick="browse()">Browse</button>
           <table class="table mt-5 text-center" id="flights-list">
             <thead>
                 <th>Origin</th>
