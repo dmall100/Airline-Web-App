@@ -124,20 +124,30 @@ background: #525861;
 border-radius: 0 8px 8px 0;
 }
 
-.select-box .option,
+.select-box .option-d,
 .selected {
 padding: 12px 24px;
 cursor: pointer;
 }
-
-.select-box .option:hover {
+.select-box .option-o,
+.selected {
+padding: 12px 24px;
+cursor: pointer;
+}
+.select-box .option-d:hover {
 background: #414b57;
 }
-
+.select-box .option-o:hover {
+    background: #414b57;
+    }
 .select-box label {
 cursor: pointer;
 }
 
-.select-box .option .radio {
+.select-box .option-d .radio {
 display: none;
+}
+
+.select-box .option-o .radio {
+    display: none;
 }

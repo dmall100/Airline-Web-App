@@ -4,51 +4,80 @@ world = [] // country, city list
 const setworld = (data) => {
   world = data; 
 }
-GetWorld(); 
-async function GetWorld(){
-  try{
-    const response = await fetch(`http://localhost:1385/world_list`);
-    const jsonData = await response.json();
-    setworld(jsonData);
-    setoptions();
-    const optionsList = document.querySelectorAll(".option");
 
-
-
-    optionsList.forEach(o => {
-    o.addEventListener("click", () => {
-    
-    selected.innerHTML = o.querySelector("label").innerHTML;
-    
-
-    optionsContainer.classList.remove("active");
-    });
-    return false; 
-});
-  }catch(err){
-    console.log(err.message)
+set_world_list();
+async function set_world_list() {
+  async function GetWorld(){
+    try{
+      const response = await fetch(`http://localhost:1385/world_list`);
+      const jsonData = await response.json();
+      setworld(jsonData);
+      setoptions('d');
+      setoptions('o'); 
+    }catch(err){
+      console.log(err.message)
+    }
   }
-}
-const selected = document.querySelector(".selected");
-const optionsContainer = document.querySelector(".options-container");
-selected.addEventListener("click", () => {
-  optionsContainer.classList.toggle("active");
-});
+  
+  GetWorld(); 
 
+  
+  const o_optionsContainer = document.querySelector(`#o-options-container`);
+  
+  const o_selected = document.querySelector(`#o-selected`);
+  
+  o_selected.addEventListener("click", () => {
+    o_optionsContainer.classList.toggle("active");
+  });
 
-const setoptions = () => {
-  world.forEach(w => {
-    optionsContainer.innerHTML += `<div class = "option">
-    <input 
-    type = "radio"
-    class = radio 
-    id = "${w.city_id}"
-    name = "category"/> 
-    <label for="d_city"> ${w.city}, ${w.country} </label>
-    </div>`;
+  const d_optionsContainer = document.querySelector(`#d-options-container`);
+  
+  const d_selected = document.querySelector(`#d-selected`);
+  
+  d_selected.addEventListener("click", () => {
+    d_optionsContainer.classList.toggle("active");
   });
   
+  
+  const setoptions = (data) => {
+    optionsContainer = o_optionsContainer; 
+    if(data == 'd'){
+      optionsContainer = d_optionsContainer; 
+    }
+    world.forEach(w => {
+      optionsContainer.innerHTML += `<div class = "option-${data}">
+      <input 
+      type = "radio"
+      class = radio 
+      id = "${w.city_id}"
+      name = "category"/> 
+      <label for="d_city"> ${w.city}, ${w.country} </label>
+      </div>`;
+    });
+    const optionsList = document.querySelectorAll(`.option-o`);
+    optionsList.forEach(o => {
+      o.addEventListener("click", () => {
+      
+      o_selected.innerHTML = o.querySelector("label").innerHTML;
+  
+      o_optionsContainer.classList.remove("active");
+      });
+    })
+    const optionsList1 = document.querySelectorAll(`.option-d`);
+    optionsList1.forEach(o => {
+      o.addEventListener("click", () => {
+      
+      d_selected.innerHTML = o.querySelector("label").innerHTML;
+  
+      d_optionsContainer.classList.remove("active");
+      });
+    })
+    
+  }
+
+  
 }
+
 
 let flights = [];
 let chosen_flight = [];
