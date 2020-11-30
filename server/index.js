@@ -48,8 +48,7 @@ app.post('/flights', async(req,res)=>{
 //get all flights
 app.get('/list_flights', async(req, res)=>{
   try{
-    const getflights = await pool.query(`SELECT * FROM flights WHERE seats_available > 0`);
-    //console.log(getflights.rows);
+    const getflights = await pool.query(`SELECT * FROM flights WHERE seats_available > 0 ORDER BY flight_id`);
     res.json(getflights.rows);
   } catch(err){
     console.log(err.message);
@@ -57,21 +56,19 @@ app.get('/list_flights', async(req, res)=>{
 });
 
 //get all passengers on a flight
-app.get('/list_flights/:code', async(req, res)=>{
+app.get('/list_flights/:id', async(req, res)=>{
   try{
-    const { code } = req.params;
+    const { id } = req.params;
     const getpassengers = await pool.query(`
-        SELECT passenger_name, seat_no 
-        FROM ticket a 
-        NATURAL JOIN 
-        boarding_passes b
-        NATURAL JOIN
-        seats c
-        WHERE a.ticket_no=b.ticket_no
-        AND
-        aircraft_code LIKE $1
-        `, [code]);
-    //console.log(getpassengers.rows);
+    SELECT passenger_name, seat_no 
+    FROM ticket a 
+    NATURAL JOIN 
+    boarding_passes b 
+    NATURAL JOIN 
+    flights c 
+    WHERE b.flight_id=${id}
+    `);
+    console.log(getpassengers.rows);
     res.json(getpassengers.rows);
   } catch(err){
     console.log(err.message);
@@ -79,6 +76,6 @@ app.get('/list_flights/:code', async(req, res)=>{
 });
 
 // set up the server listening at port 5000 (the port number can be changed)
-app.listen(1385, ()=>{
-  console.log("server has started on port 1385");
-});
+// PORT
+const port = process.env.PORT || 1385;
+app.listen(port, ()=> console.log(`Listening on port ${port}...`));

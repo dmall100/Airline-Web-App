@@ -6,8 +6,8 @@ const setFlights= (data) => {
   list_flights = data;
 }
 
-const setPassengers = (data) => {
-  list_passengers = data;
+const setPassengers = (data1) => {
+  list_passengers = data1;
 }
 
 // function to display flights
@@ -24,10 +24,11 @@ const displayFlights = () => {
     <th>${flights.scheduled_arrival}</th>
     <th>${flights.departure_airport}</th>
     <th>${flights.arrival_airport}</th>
+    <th>${flights.status}</th>
     <th>${flights.aircraft_code}</th>
     <th>${flights.seats_available}</th>
     <th>${flights.seats_booked}</th>
-    <th><button class="btn btn-warning" type="button" data-toggle="modal" data-target="#flight-info" onclick="selectPassengers(${flights.aircraft_code})">Info</button></th>
+    <th><button class="btn btn-warning" type="button" data-toggle="modal" data-target="#flight-info" onclick="selectPassengers(${flights.flight_id})">Info</button></th>
     </tr>`;
   })
   flightsTable.innerHTML = tableHTML;
@@ -38,15 +39,14 @@ const displayPassengers = () => {
   const passengersTable = document.querySelector('#passengers-table');
 
   // display all flights by modifying the HTML in "passengers-table"
-  list_passengers.map(flights =>{
-    tableHTML +=
-    `<tr key=${flights.aircraft_code}>
-    <th>${flights.flight_id}</th>
-    <th>${flights.departure_airport}</th>
-    <th> Test </th>
+  let tableHTML1 = "";
+  list_passengers.map(passengers =>{
+    tableHTML1 +=
+    `<th>${passengers.seat_no}</th>
+    <th>${passengers.passenger_name}</th>
     </tr>`;
   })
-  passengersTable.innerHTML = tableHTML;
+  passengersTable.innerHTML = tableHTML1;
 }
 
 selectFlights();
@@ -54,9 +54,9 @@ selectFlights();
 // The following are async function to select, insert, update and delete todos
 // select all the todos
 async function selectFlights() {
-  // use try... catch... to catch error
+  // use try... catch... to catch error 
   try {
-
+    
     // GET all flights from "http://localhost:1385/list_flights"
     const response = await fetch("http://localhost:1385/list_flights")
     const jsonData = await response.json();
@@ -70,12 +70,11 @@ async function selectFlights() {
 }
 
 // select all the passengers
-async function selectPassengers(code) {
+async function selectPassengers(id) {
   // use try... catch... to catch error
   try {
-    
     // GET all passengers from "http://localhost:1385/list_flights/${code}"
-    const response = await fetch("http://localhost:1385/list_flights/${code}")
+    const response = await fetch(`http://localhost:1385/list_flights/${id}`);
     const jsonData = await response.json();
 
     setPassengers(jsonData);
