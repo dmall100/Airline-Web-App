@@ -1,6 +1,7 @@
 
 let flights = [];
 let chosen_flight = [];
+let no_ticket = 1;
 const setflights= (data) => {
   flights = data;
 }
@@ -32,6 +33,23 @@ async function browse() {
   // use try... catch... to catch error
 }
 
+
+async function search() {
+  const id = document.querySelector("#s_no_ticket").value;
+  const d_city =document.querySelector("#d_city").value; 
+  const d_date =document.querySelector("#d_date").value;
+  const a_city =document.querySelector("#a_city").value; 
+  const a_date =document.querySelector("#a_date").value;
+  try {
+    const response = await fetch(`http://localhost:1385/flights/${id}/${d_city}+${a_city}`);
+    const jsonData = await response.json();
+    setflights(jsonData);
+    displayflights();
+    return false; 
+  } catch (err) {
+    console.log(err.message);
+  }
+}
 async function insert_pass() {
   const name = document.querySelector("#pass-name").value;
   try {
