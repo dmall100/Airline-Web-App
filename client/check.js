@@ -10,14 +10,6 @@ const setBoardingPass = (data1) => {
     boarding_pass = data1;
 }
 
-// Show the boarding pass on button click
-function showhide() {
-    if (document.getElementById("bpass-display").style.display === "none")
-        document.getElementById("bpass-display").style.display = "block";
-    //else
-    //document.getElementById("bpass-display").style.display = "none";
-}
-
 // Use ticket number from input box to get info from ticket table
 async function getPassengerInfo() {
 
@@ -27,10 +19,22 @@ async function getPassengerInfo() {
         const response = await fetch(`http://localhost:1385/check_in/${ticket_no}`);
         const jsonData = await response.json();
 
+        if (Object.keys(jsonData).length > 0) {
+            document.getElementById("bpass-display").style.display = "block";
+            document.getElementById("error-display").style.display = "none";
+        } else {
+            document.getElementById("bpass-display").style.display = "none";
+            document.getElementById("error-display").style.display = "block";
+        }
+
+        console.log(Object.keys(jsonData).length);
+
         setBoardingPass(jsonData);
         displayBoardingPass();
 
     } catch (err) {
+        document.getElementById("bpass-display").style.display = "none";
+        document.getElementById("error-display").style.display = "block";
         console.log(err.message);
     }
 }

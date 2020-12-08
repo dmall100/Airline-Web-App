@@ -161,3 +161,8 @@ h2 {
 .select-box .option-o .radio {
     display: none;
 }
+
+.error-message th {
+    font: bold 18px/1.1em Arial, Helvetica, sans-serif;
+    color: #cf1818;
+}

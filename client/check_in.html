@@ -16,6 +16,7 @@
             text-align: center;
         }
     </style>
+
 </head>
 
 <body>
@@ -28,12 +29,13 @@
     <!-- Back button -->
     <button class="btn-home" onclick="location.href = 'index.html'">Home</button>
 
-    <!-- todo insert input box and add button -->
+    <!-- check in input box and button -->
     <div class="input-group mb-3" id="input-ticket">
         <input type="text" class="form-control" placeholder="Enter Ticket Number" id="ticket-number">
         <div class="input-group-append">
-            <button class="btn btn-primary" type="button" onclick="showhide();getPassengerInfo()">Check In</button>
+            <button class="btn btn-primary" type="button" onclick="getPassengerInfo()">Check In</button>
         </div>
+
     </div>
     <!-- end of insert form -->
 
@@ -57,6 +59,15 @@
     </table>
     <!-- End of dynamic table -->
 
+    <!-- table to display error message -->
+    <table class="error-message" id="error-display" style="display:none;">
+        <thead>
+            <tr>
+                <th>Error: Invalid ticket number, please try again.</th>
+            </tr>
+        </thead>
+    </table>
+    <!-- End of dynamic table -->
 
     <!-- the popup modal, used for update the todo description -->
     <div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">

@@ -161,7 +161,6 @@ app.get('/check_in/:num', async(req, res) => {
         `);
         res.json(getboardingpass.rows);
     } catch (err) {
-        console.log('here');
         console.log(err.message);
     }
 });
