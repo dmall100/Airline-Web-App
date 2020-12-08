@@ -133,7 +133,7 @@ CREATE TABLE boarding_passes (
     flight_id integer NOT NULL,
     boarding_no integer NOT NULL,
     seat_no character varying(4) NOT NULL,
-    checked_bags integer,
+    checked_bags integer NOT NULL,
     PRIMARY KEY(ticket_no, flight_id),
     CONSTRAINT boarding_passes_ticket_no_fkey FOREIGN KEY (ticket_no, flight_id) REFERENCES ticket_flights(ticket_no, flight_id)
 );
