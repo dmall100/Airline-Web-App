@@ -10,7 +10,16 @@ img {
 }
 
 html {
-    background-color: white;
+    height: 300vh;
+    background: #f7f6ff;
+}
+
+h1 {
+    display: flex;
+    color: #063d5f;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
 ul {
@@ -55,8 +64,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 body {
-    font-family: "Roboto", sans-serif;
-    background: #f7f6ff;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 h2 {
@@ -87,7 +95,7 @@ h2 {
 }
 
 .selected {
-    background: #d90000;
+    background: #035080;
     border-radius: 8px;
     margin-bottom: 8px;
     color: #f5f6fa;

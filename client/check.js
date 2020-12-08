@@ -10,7 +10,7 @@ const setBoardingPass = (data1) => {
     boarding_pass = data1;
 }
 
-// Use ticket number from input box to get info from ticket table
+// Use ticket number from input box to get boarding pass info
 async function getPassengerInfo() {
 
     const ticket_no = document.querySelector('#ticket-number').value;
@@ -56,28 +56,3 @@ const displayBoardingPass = () => {
     })
     bpassTable.innerHTML = tableHTML;
 }
-
-// // insert passenger info to tables and display boarding pass
-// async function insertPassInfo() {
-//     // read the ticket number and # of checked bags from input
-//     const ticket = document.querySelector('#ticket-number').value;
-
-//     // use try... catch... to catch error
-//     try {
-
-//         // insert new todo to "http://localhost:5000/todos", with "POST" method
-//         const body = { ticket: ticket };
-//         const response = await fetch("http://localhost:5000/todos", {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify(body)
-//         });
-
-//         // refresh the page when inserted
-//         location.reload();
-//         return false;
-
-//     } catch (err) {
-//         console.log(err.message);
-//     }
-// }
