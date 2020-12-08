@@ -20,7 +20,7 @@
             </div>
           </div>
           <div class = "select-box">
-            <input type = "date" placeholder = "mm-dd-yyyy" id = "d_date" >
+            <input class = "input-box" type = "date" placeholder = "mm-dd-yyyy" id = "d_date" >
           </div>
           <div class = "select-box">
             <div class = "options-container" id = "d-options-container">
@@ -30,30 +30,26 @@
             </div>
           </div>
           <div class = "select-box">
-            <input type = "date" placeholder = "mm-dd-yyyy" id = "a_date" >
+            <input class = "input-box" type = "date" placeholder = "mm-dd-yyyy" id = "a_date" >
           </div>
           <div class = "select-box">
-            <input class = "user-input" type = "number" placeholder="No Tickets" id = "s_no_ticket" >
+            <input class = "input-box" type = "number" placeholder="No Tickets" id = "s_no_ticket" >
             <button class="btn-book-search" type="button" onclick="search()">Search</button>
           </div>
           </div>
           <div class = "container">
           <h4> Browse Available Flights </h4>
-          <input class = "user-input" type = "number" placeholder="No Tickets" id = "b_no_ticket" value = 1>
+          <input class = "input-box" type = "number" placeholder="No Tickets" id = "b_no_ticket" >
           <button class="btn-book-search" type="button" onclick="browse()">Browse</button>
-          <table class="table mt-5 text-center" id="flights-list">
-            <thead>
-                <th>Origin</th>
-                <th></th>
-                <th>Destionation</th>
-                <th></th>
-            </thead>
+          <table class = " " id="flights-list">
             <!-- add todos in tbody by modying the HTML in main.js -->
             <tbody id="flights-table">
             </tbody>
           </table>
         </div>
-        <button class = "btn-home" onclick="location.href = 'index.html'" > Home </button>
+        <div class = "nav-container">
+          <button class = "nav-btn" onclick = "location.href = 'index.html'"> Home</button>
+        </div>
         
     </body>
 

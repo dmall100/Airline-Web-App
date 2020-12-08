@@ -4,30 +4,20 @@ img {
 }
 
 html {
-    background-color: white;
-}
-ul {
-    background-color:  #d90000;
+    height: 300vh;
+    background: #f7f6ff;
 }
 
-.btn-home {
-    background-color : #d90000; 
-    color : white; 
+
+h1 {
+    display: flex; 
+    color: #063d5f;
+    justify-content: center;
+    align-items: center; 
+    padding: 20px; 
+
 }
 
-h2 {
-    color: #d90000;
-    position: inherit;
-}
-
-h4 {
-    padding-top: 30px;
-}
-.btn-book-search {
-    cursor: pointer; 
-    background-color:#d90000 ;
-    color: white;
-}
 input[type="date"]::-webkit-calendar-picker-indicator {
     background: transparent;
     bottom: 0;
@@ -45,8 +35,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 body {
-font-family: "Roboto", sans-serif;
-background: #f7f6ff;
+font-family: Arial, Helvetica, sans-serif;
+
 }
 
 h2 {
@@ -54,7 +44,7 @@ margin: 16px;
 }
 
 .container {
-margin-top: 100px;
+margin-top: 100 px;
 padding: 32px;
 }
 
@@ -74,11 +64,12 @@ transition: all 0.4s;
 border-radius: 8px;
 overflow: hidden;
 
+
 order: 1;
 }
 
 .selected {
-background: #d90000;
+background: #035080;
 border-radius: 8px;
 margin-bottom: 8px;
 color: #f5f6fa;
@@ -150,4 +141,128 @@ display: none;
 
 .select-box .option-o .radio {
     display: none;
+}
+.flight-container {
+    position: sticky; 
+    top: 0; 
+    padding: 20px;
+    background-color: #a90000;
+    text-align: center;
+}
+.flight-info {
+
+    display: inline;
+    color:  #ffffff;
+    font-size: 18px;
+    font-weight: bolder;
+    padding: 5%; 
+}
+
+
+
+.input-container {
+    background-color : #035080;
+    justify-content: center;
+    padding: 15px; 
+    margin-top: 70px;
+    margin-bottom: 70px;
+}
+.input-box {
+    border-radius: 8px;
+    padding: 12px 24px;
+    margin: 5px;
+    position: relative;
+}
+.field-input-container {
+    padding: 20; 
+}
+
+.date-label {
+    position: absolute;
+    z-index: 1; 
+    background-color:#a90000;
+    color:white; 
+    font-size: 13px;
+    padding: 3px;
+}
+
+.pass-label {
+    margin: 5px; 
+    color: #ffffff; 
+    font-weight: bold;
+}
+
+.input-title {
+    margin: 10px;
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: bolder;
+}    
+.mid{
+    
+    padding-top: 10px;
+
+    padding-bottom: 10px;
+
+
+}
+.btm{
+    padding-top: 10px;
+    padding-bottom: 40px;
+
+
+}
+
+.pass-num {
+    text-align: left;
+    padding-left: 2px;
+}
+
+
+.nav-container {
+    display: flex;
+    justify-content: center;
+
+}
+
+
+.nav-btn, .btn-book-search {
+    cursor: pointer;
+    margin: 5px;
+    background-color : #d90000; 
+    color : white; 
+    border-radius: 8px;
+    padding: 10px 15px
+}
+
+.pay-text { 
+    margin: 10px;
+    padding: 15px; 
+    background-color: #e4e2e2; 
+    border: 3px solid #034374;  
+    border-radius: 8px;
+}
+
+.pay-text label{ 
+    color: #03477b; 
+    font-weight: bolder; 
+}
+
+.price-table {
+    padding-bottom: 10px;
+    width: 100%; 
+    border-top: 3px solid #034374; 
+}
+.price-table th, td{
+    text-align: left;
+}
+
+
+.total-title, #total { 
+    border-top: 2px dotted #03477b; 
+}
+
+.flight-row{
+    background-color: #034374;
+    color: #bfbbbb; 
 }
