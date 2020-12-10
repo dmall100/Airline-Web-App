@@ -12,15 +12,20 @@ let payment = {};
 let contact = {}; 
 
 
+
+
 const set_no_ticket = (data) => {
   localStorage.setItem("no_ticket", JSON.stringify(data));
   localStorage.setItem("no_pass", "1"); 
 }
 
-const set_chosen_flight = (flight_id, a_city, d_city, a_date, d_date) => {
-  localStorage.setItem("flight_id", JSON.stringify(flight_id));
+const set_chosen_flight = (trip_no, a_city, d_city, a_date, d_date, c_a_date, c_d_date, c_city) => {
+  localStorage.setItem("trip_no", JSON.stringify(trip_no));
   localStorage.setItem("a_city", JSON.stringify(a_city));
   localStorage.setItem("d_city", JSON.stringify(d_city));
+  localStorage.setItem("c_a_date", JSON.stringify(c_a_date));
+  localStorage.setItem("c_d_date", JSON.stringify(c_d_date));
+  localStorage.setItem("c_city", JSON.stringify(c_city));
   localStorage.setItem("a_date", JSON.stringify(a_date));
   localStorage.setItem("d_date", JSON.stringify(d_date));
 
@@ -140,7 +145,7 @@ function set_world_list() {
 async function browse() {
   const id = document.querySelector("#b_no_ticket").value;
   if(id <= 0){
-    alert("Please enter a valid ticket number");
+    alert("Please enter a valid number of tickets");
     return false; 
   }
   try {
@@ -157,16 +162,16 @@ async function browse() {
 
 
 async function search() {
-  const id = document.querySelector("#s_no_ticket").value;
-  if(id <= 0){
-    alert("Please enter a valid ticket number");
-    return false; 
-  }
-  const d_city = depart_city; 
-  //const d_date =document.querySelector("#d_date").value;
-  const a_city = arrive_city;
-  //const a_date =document.querySelector("#a_date").value;
+ 
+
   try {
+    const id = document.querySelector("#s_no_ticket").value;
+    const d_city = depart_city; 
+    const a_city = arrive_city;
+    if(id <= 0){
+      alert("Please enter a valid number of tickets");
+      return false; 
+    }
     const response = await fetch(`http://localhost:1585/flights/${id}/${d_city}-${a_city}`);
     const jsonData = await response.json();
     set_no_ticket(id); 
@@ -179,22 +184,6 @@ async function search() {
 }
 
 
-async function insert_pass() {
-  const name = document.querySelector("#pass-name").value;
-  try {
-    const body = {name: name}
-    const response = await fetch("http://localhost:1585/flights", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    location.reload();
-  } catch(err) {
-    console.log(err.message)
-  }
-}
-
-
 
 function add_cust_event(){
   const flight_rows = document.querySelectorAll(`.flight-row`);
@@ -203,9 +192,11 @@ function add_cust_event(){
       const a_city = flight_row.querySelector("#a_city").textContent;
       const d_city = flight_row.querySelector("#d_city").textContent;
       const a_date = flight_row.querySelector("#a_date").textContent;
-      const d_date = flight_row.querySelector("#d_date").textContent;
-      const flight_id = flight_row.querySelector("#flight_id").textContent;
-      set_chosen_flight(flight_id,a_city, d_city, a_date, d_date); 
+      const d_date = flight_row.querySelector("#d_date").textContent;const c_city = flight_row.querySelector("#c_city").textContent;
+      const c_a_date = flight_row.querySelector("#c_a_date").textContent;
+      const c_d_date = flight_row.querySelector("#c_d_date").textContent;
+      const trip_no = flight_row.querySelector("#trip_no").textContent;
+      set_chosen_flight(trip_no,a_city, d_city, a_date, d_date, c_d_date, c_a_date, c_city); 
       document.location.href = 'costumer_info.html';  
     });
   }
@@ -225,11 +216,15 @@ function displayflights(){
       
       `<div  >
       <tr class = "flight-row" >
-      <th  id = "flight_id" >${flight.flight_id}</th>
-      <th  id = "d_city" >${flight.departure_city}</th>
-      <th  id = "d_date"> $${flight.scheduled_departure}</th>
-      <th id = "a_city" >${flight.arrival_city}</th>
-      <th  id = "a_date"> ${flight.scheduled_arrival}</th>
+      <th  id = "trip_no" >${flight.trip_no}</th>
+      <th  id = "d_city" >${flight.f1_departure_city}</th>
+      <th  id = "d_date"> $${new Date(flight.f1_scheduled_departure).toUTCString()}</th>
+      <th  id = "c_a_date"> ${new Date(flight.f1_scheduled_arrival).toUTCString()}</th>
+      <th id = "c_city" >${flight.f1_arrival_city}</th>
+      <th  id = "c_d_date"> $${new Date(flight.f2_scheduled_departure).toUTCString()}</th>
+      <th  id = "a_date"> ${new Date(flight.f2_scheduled_arrival).toUTCString()}</th>
+      <th id = "a_city" >${flight.f2_arrival_city}</th>
+
       <th> <button id = "select-btn" class = "btn-book-search"> select </button></th>
       </tr> 
       </div>`;
@@ -240,7 +235,7 @@ function displayflights(){
     
   }
   else{
-    flightsTable.innerHTML = '<tr> No available flights </tr>';
+    flightsTable.innerHTML = '<h3 class = "warning" > No available flights </h3>';
   }
 
 }
@@ -431,24 +426,36 @@ function calc_total(no_tick, discounts){
 }
 
 function cost_onload(){
-  var a_city = localStorage.getItem("a_city").replace(/['"$]+/g, ''); 
-  var d_city = localStorage.getItem("d_city").replace(/['"$]+/g, ''); 
-  var a_date = localStorage.getItem("a_date").replace(/['"$]+/g, ''); 
-  var d_date = localStorage.getItem("d_date").replace(/['"$]+/g, ''); 
+  const a_city = localStorage.getItem("a_city").replace(/['"$]+/g, ''); 
+  const d_city = localStorage.getItem("d_city").replace(/['"$]+/g, ''); 
+  const c_city = localStorage.getItem("c_city").replace(/['"$]+/g, '');
+  const a_date = new Date(localStorage.getItem("a_date").replace(/['"$]+/g, '')); 
+  const c_a_date = new Date(localStorage.getItem("c_a_date").replace(/['"$]+/g, '')); 
+  const c_d_date = new Date(localStorage.getItem("c_d_date").replace(/['"$]+/g, '')); 
+  const d_date = new Date(localStorage.getItem("d_date").replace(/['"$]+/g, '')); 
 
   const flightinfo = document.querySelector(".flight-container");
 
-  flightinfo.innerHTML = `<div class = "flight-info"> 
+  flightinfo.innerHTML = `
+  <div id = "city" class = "flight-info" > 
   ${d_city}
   </div>
-  <div class = "flight-info" > 
-  ${d_date}
+  <div id = "date" class = "flight-info" > 
+  ${d_date.toUTCString()}
   </div>
-  <div class = "flight-info" > 
+  <div id = "date" class = "flight-info" > 
+  ${c_a_date.toUTCString()}
+  </div>
+  <div id = "city" class = "flight-info" > 
+  ${c_city}
+  </div>
+  <div id = "date" class = "flight-info" > 
+  ${c_d_date.toUTCString()}
+  </div>
+  <div id ="date" class = "flight-info" > 
+  ${a_date.toUTCString()}
+  <div id = "city" class = "flight-info"> 
   ${a_city}
-  </div>
-  <div class = "flight-info" > 
-  ${a_date}
   </div>`;
 
   var no_tick = parseInt(localStorage.getItem("no_ticket").replace(/['"$]+/g, '')); 
@@ -460,7 +467,7 @@ function cost_onload(){
   for(let i = 1; i <= no_tick; i++) {
     temp_container += `
     <label class = "pass-label" for = ".pass-input"> Passenger ${i} </label>
-    <div class = "pass-input" id = "pass-${i}"> 
+    <div class = "pass-input" id = "pass-${i}" > 
       <div class = "mid">
         <select class = "input-box"> 
           <option class = prefix-op value = "NULL"> - </option>

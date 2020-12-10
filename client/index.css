@@ -1,23 +1,12 @@
-img {
-    max-width: 30%;
-    max-height: 30%;
-}
+
 
 html {
-    background-image: image("unif");
     height: 300vh;
-    background: #f7f6ff;
+    background: #ffffff;
 }
 
 
-h1 {
-    display: flex; 
-    color: #063d5f;
-    justify-content: center;
-    align-items: center; 
-    padding: 20px; 
 
-}
 
 input[type="date"]::-webkit-calendar-picker-indicator {
     background: transparent;
@@ -145,7 +134,6 @@ display: none;
     display: none;
 }
 .flight-container {
-    position: sticky; 
     top: 0; 
     padding: 20px;
     background-color: #a90000;
@@ -285,4 +273,25 @@ display: none;
     display: list-item;
     padding-left: 20%;
 
+}
+
+.headImage {
+    display: flex;
+    justify-content: center;
+
+}
+
+h1 {
+    color: #d90000;
+    font-size: 55px;
+    display: inline;
+   
+
+}
+img{
+    max-width: 20%;
+    max-height: 20%;
+    display: inline;
+    margin-left: 5px;
+    order: 2;
 }

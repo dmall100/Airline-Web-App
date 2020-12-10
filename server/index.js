@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 const pool = require('./db');
 const transactions = require('./transaction'); 
+const query = require('./query'); 
 let index = 2981;  
 var async = require('async'); 
 const { response } = require('express');
@@ -31,28 +32,8 @@ app.get('/world_list', async(req, res)=>{
 //get all flightss
 app.get('/flights', async(req, res)=>{
   try{
-    console.log("HERE");
     const no_ticket = req.body; 
-    console.log("no is");
-    const avflight = await pool.query(`SELECT *, lD.city as departure_city, lA.city as arrival_city
-      FROM 
-      (
-        SELECT *, A.city_id AS a_city_id, D.city_id AS d_city_id 
-        FROM flights AS F
-        INNER JOIN 
-        airport AS D
-        on F.departure_airport = D.airport_code
-        INNER JOIN
-        airport As A
-        on arrival_airport = A.airport_code
-      ) B
-      INNER JOIN 
-      location AS lD
-      on B.d_city_id = lD.city_id
-      INNER JOIN 
-      location AS lA
-      on B.a_city_id = lA.city_id`
-     );
+    const avflight = await pool.query(query.queryGetFlights); 
     res.json(avflight.rows);
   } catch(err){
     console.log(err.message);
@@ -63,80 +44,28 @@ app.get('/flights', async(req, res)=>{
 app.get('/flights/:id', async(req, res)=>{
   try{
     const {id} = req.params; 
-    const avflight = await pool.query(`
-        SELECT *, lD.city as departure_city, lA.city as arrival_city
-        FROM 
-        (
-          SELECT *, A.city_id AS a_city_id, D.city_id AS d_city_id 
-          FROM flights AS F
-          INNER JOIN 
-          airport AS D
-          on F.departure_airport = D.airport_code
-          INNER JOIN
-          airport As A
-          on arrival_airport = A.airport_code
-        ) B
-        INNER JOIN 
-        location AS lD
-        on B.d_city_id = lD.city_id
-        INNER JOIN 
-        location AS lA
-        on B.a_city_id = lA.city_id
-        WHERE seats_available >= $1;`, [id]
-    );
-    console.log(avflight.rows);
+    let avflight = await pool.query(query.queryGetTrips1, [id]);
+    avflight 
+    console.log(avflight.rows)
     res.json(avflight.rows);
   } catch(err){
     console.log(err.message);
   }
 });
-app.get('/flights/:id/:d_city-:a_city', async(req, res)=>{
+app.get('/flights/:id/:d_city-:a_city/', async(req, res)=>{
   try{
-    console.log(`Hello`)
     const {id} = req.params; 
     const {a_city} = req.params; 
-    const {d_city} = req.params; 
-    const avflight = await pool.query(`
-    SELECT * 
-    FROM(
-      SELECT *, lD.city as departure_city, lA.city as arrival_city
-    FROM 
-    (
-      SELECT *, A.city_id AS a_city_id, D.city_id AS d_city_id 
-      FROM flights AS F
-      INNER JOIN 
-      airport AS D
-      on F.departure_airport = D.airport_code
-      INNER JOIN
-      airport As A
-      on arrival_airport = A.airport_code
-    ) B
-    INNER JOIN 
-    location AS lD
-    on B.d_city_id = lD.city_id
-    INNER JOIN 
-    location AS lA
-    on B.a_city_id = lA.city_id
-    WHERE seats_available >= $1
-    ) AS F
-    WHERE F.a_city_id = $2 and F.d_city_id = $3;`, [id,a_city, d_city]);
+    const {d_city} = req.params;
+
+    const avflight = await pool.query(query.queryGetTrip, [id,d_city, a_city]);
+    
     console.log(avflight.rows);
     res.json( avflight.rows);
 
   } catch(err){
     console.log(err.message);
   }
-});
-app.post('/flights', async(req,res)=>{
-  try{
-    const {name} = req.body;
-    const newTodo = await pool.query(`INSERT INTO booking (name) VALUES($1) returning *`,[name]);
-    console.log(newTodo)
-    res.json(newTodo);  
-  }catch(err){
-    console.log(err.message);
-  }
-
 });
 
 
