@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const pool = require('./db');
+const fs = require('fs');
+fs.writeFile('../../query.sql/', '', function() { console.log('query.sql cleaned and ready') });
+fs.writeFile('../../transaction.sql/', '', function() { console.log('transaction.sql cleaned and ready') });
 
 // middleware
 app.use(cors());
@@ -124,6 +127,11 @@ app.get('/list_flights', async(req, res) => {
     try {
         const getflights = await pool.query(`SELECT * FROM flights WHERE seats_available > 0 ORDER BY flight_id;`);
         res.json(getflights.rows);
+
+        // Write to query.sql
+        var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
+        stream.write(`SELECT * FROM flights WHERE seats_available > 0 ORDER BY flight_id;\n`);
+        stream.end();
     } catch (err) {
         console.log(err.message);
     }
@@ -142,8 +150,20 @@ app.get('/list_flights/:id', async(req, res) => {
             flights c 
             WHERE b.flight_id=${id};
             `);
-        console.log(getpassengers.rows);
         res.json(getpassengers.rows);
+
+        // Write to query.sql
+        var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
+        stream.write(`
+            SELECT passenger_name, seat_no 
+            FROM ticket a 
+            NATURAL JOIN 
+            boarding_passes b 
+            NATURAL JOIN 
+            flights c 
+            WHERE b.flight_id=${id};\n
+        `);
+        stream.end();
     } catch (err) {
         console.log(err.message);
     }
@@ -160,11 +180,21 @@ app.get('/check_in/:num', async(req, res) => {
             WHERE ticket_no = '${num}';
         `);
         res.json(getboardingpass.rows);
+
+        // Write to query.sql
+        var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
+        stream.write(`
+        SELECT * 
+        FROM boarding_passes 
+        WHERE ticket_no = '${num}';\n
+        `);
+        stream.end();
     } catch (err) {
         console.log(err.message);
     }
 });
 
+// add flight
 app.post('/admin_add_flight', async(req, res) => {
     try {
         const {
@@ -197,6 +227,21 @@ app.post('/admin_add_flight', async(req, res) => {
 
         res.json(newFlight);
         console.log("committed");
+
+        // Write to transaction.sql
+        var stream = fs.createWriteStream("../../transaction.sql/", { flags: 'a' });
+        stream.write(`START TRANSACTION; \nINSERT INTO flights VALUES(
+            ${flight_id}, 
+            '${flight_no}', 
+            '${dep_time}', 
+            '${arr_time}', 
+            '${dep_airport}', 
+            '${arr_airport}', 
+            '${flight_status}', 
+            '${aircraft_code}', 
+            ${seats_avail}, 
+            ${seats_booked}) returning *;\nCOMMIT;\n`);
+        stream.end();
     } catch (err) {
         // Rollback if incorrect input is given.
         await pool.query(`ROLLBACK`)
@@ -217,6 +262,15 @@ app.get('/admin_payment/:ref', async(req, res) => {
         WHERE a.book_ref='${ref}';
         `);
         res.json(getpayment.rows);
+
+        // Write to query.sql
+        var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
+        stream.write(`SELECT book_ref, amount_per_tick, num_tickets, discount, total amount 
+        FROM payment a 
+        NATURAL JOIN 
+        bookings b 
+        WHERE a.book_ref='${ref}';\n`);
+        stream.end();
     } catch (err) {
         console.log(err.message);
     }
