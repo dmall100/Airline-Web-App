@@ -224,6 +224,7 @@ function displayflights(){
       <th  id = "c_d_date"> $${new Date(flight.f2_scheduled_departure).toUTCString()}</th>
       <th  id = "a_date"> ${new Date(flight.f2_scheduled_arrival).toUTCString()}</th>
       <th id = "a_city" >${flight.f2_arrival_city}</th>
+      <th id = "a_city" >${flight.f2_arrival_city}</th>
 
       <th> <button id = "select-btn" class = "btn-book-search"> select </button></th>
       </tr> 
