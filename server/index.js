@@ -165,6 +165,63 @@ app.get('/check_in/:num', async(req, res) => {
     }
 });
 
+app.post('/admin_add_flight', async(req, res) => {
+    try {
+        const {
+            flight_id,
+            flight_no,
+            dep_time,
+            arr_time,
+            dep_airport,
+            arr_airport,
+            flight_status,
+            aircraft_code,
+            seats_avail,
+            seats_booked
+        } = req.body;
+
+        // Transaction to insert flight to db.
+        await pool.query(`START TRANSACTION`)
+        const newFlight = await pool.query(`INSERT INTO flights VALUES(
+            ${flight_id}, 
+            '${flight_no}', 
+            '${dep_time}', 
+            '${arr_time}', 
+            '${dep_airport}', 
+            '${arr_airport}', 
+            '${flight_status}', 
+            '${aircraft_code}', 
+            ${seats_avail}, 
+            ${seats_booked}) returning *`);
+        await pool.query(`COMMIT`)
+
+        res.json(newFlight);
+        console.log("committed");
+    } catch (err) {
+        // Rollback if incorrect input is given.
+        await pool.query(`ROLLBACK`)
+        res.json(0);
+        console.log(err.message);
+    }
+});
+
+//get payment
+app.get('/admin_payment/:ref', async(req, res) => {
+    try {
+        const { ref } = req.params;
+        const getpayment = await pool.query(`
+        SELECT book_ref, amount_per_tick, num_tickets, discount, total_amount 
+        FROM payment a 
+        NATURAL JOIN 
+        bookings b 
+        WHERE a.book_ref='${ref}';
+        `);
+        res.json(getpayment.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
 // set up the server listening at port 5000 (the port number can be changed)
 // PORT
 const port = process.env.PORT || 1385;

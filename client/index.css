@@ -31,9 +31,27 @@ ul {
     color: white;
 }
 
+.body-admin {
+    text-align: center;
+}
+
+.btn-admin {
+    background-color: #27aaca;
+    border: 2px solid #000000;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
 h2 {
-    color: #d90000;
+    color: rgb(1, 158, 14);
     position: inherit;
+    text-align: center;
+    font-size: 42px;
+    font-weight: bold;
 }
 
 h4 {
@@ -173,4 +191,9 @@ h2 {
 .error-message th {
     font: bold 18px/1.1em Arial, Helvetica, sans-serif;
     color: #cf1818;
+}
+
+.success-message th {
+    font: bold 18px/1.1em Arial, Helvetica, sans-serif;
+    color: green;
 }
