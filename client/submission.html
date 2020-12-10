@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Submission</title>
+        <link rel = "stylesheet" href = "index.css">
+    </head>
+    <body>
+        <h2> Submission </h2>
+
+        <!---Browse Flights-->
+        
+        <div class = "container"> 
+          <div class = "select-box">
+            <div class = "options-container" id = "o-options-container" >
+            </div>
+            <div class = "selected" id = "o-selected">
+              Origin
+            </div>
+          </div>
+          <div class = "select-box">
+            <input class = "input-box" type = "date" placeholder = "mm-dd-yyyy" id = "d_date" >
+          </div>
+          <div class = "select-box">
+            <div class = "options-container" id = "d-options-container">
+            </div>
+            <div class = "selected"  id = "d-selected">
+              Destination
+            </div>
+          </div>
+          <div class = "select-box">
+            <input class = "input-box" type = "date" placeholder = "mm-dd-yyyy" id = "a_date" >
+          </div>
+          <div class = "select-box">
+            <input class = "input-box" type = "number" placeholder="No Tickets" id = "s_no_ticket" >
+            <button class="btn-book-search" type="button" onclick="search()">Search</button>
+          </div>
+          </div>
+        
+    </body>
+
+  <script src="book.js"></script>
+
+</html>

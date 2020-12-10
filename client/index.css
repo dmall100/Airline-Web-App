@@ -4,6 +4,7 @@ img {
 }
 
 html {
+    background-image: image("unif");
     height: 300vh;
     background: #f7f6ff;
 }
@@ -36,6 +37,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 body {
 font-family: Arial, Helvetica, sans-serif;
+text-align: center;
 
 }
 
@@ -69,7 +71,7 @@ order: 1;
 }
 
 .selected {
-background: #035080;
+background: #a90000;
 border-radius: 8px;
 margin-bottom: 8px;
 color: #f5f6fa;
@@ -265,4 +267,22 @@ display: none;
 .flight-row{
     background-color: #034374;
     color: #bfbbbb; 
+}
+
+.container {
+    border: 6px solid #094d81;
+    background-color:  #035080;
+    padding: 10px; 
+    margin-bottom: 10px;
+    margin-top: 100px;
+    text-align: center;
+    
+}
+
+.container2 {
+    border: 6px solid #094d81;
+    background-color:  #035080;
+    display: list-item;
+    padding-left: 20%;
+
 }

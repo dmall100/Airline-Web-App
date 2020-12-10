@@ -7,12 +7,16 @@ let error_style = false;
 const tick_price = 700; 
 const tax = 6.25/100; 
 let discounts = 0; 
+let passgs; 
+let payment = {}; 
+let contact = {}; 
 
 
 const set_no_ticket = (data) => {
   localStorage.setItem("no_ticket", JSON.stringify(data));
   localStorage.setItem("no_pass", "1"); 
 }
+
 const set_chosen_flight = (flight_id, a_city, d_city, a_date, d_date) => {
   localStorage.setItem("flight_id", JSON.stringify(flight_id));
   localStorage.setItem("a_city", JSON.stringify(a_city));
@@ -33,6 +37,18 @@ const setarr_id = (data) => {
   arrive_city = data; 
 }
 
+const setpassgs = (data) => {
+  passgs.push(data);  
+}
+
+const setcontact = (data) => {
+  contact = data; 
+}
+
+const setpayment = (data) => {
+  payment = data; 
+}
+
 
 const setflights= (data) => {
   flights = []; 
@@ -41,7 +57,8 @@ const setflights= (data) => {
 
 
 
-set_world_lisk();
+
+set_world_list();
 function set_world_list() {
   async function GetWorld(){
     try{
@@ -231,42 +248,48 @@ function displayflights(){
 
 
 
-function verify(container, value, opt){
+function verify(container, value, i, opt){
   //opt 0: none , 1: date (BD), 2: date (exp), 3: id, 4: card num 
   var error = 0; 
-
   let now = new Date(); 
   if(opt == 1) {
     let date = new Date(value); 
     let legal_age = 18; 
     let legal_date = new Date(now.getFullYear() -legal_age, now.getMonth(), now.getDay());
     if(date > legal_date){
-      alert("You must be 18 years or older to book a ticket!"); 
+      alert(`Passenger ${i} Error: You must be 18 years or older to book a ticket!`); 
       error++; 
     }
   }
+
+  
   else if (opt == 2) {
     let date = new Date(value); 
     if(date <= now){
-      alert("The expiration date entered is invalid!")
+      if(i != 0){
+        alert(`Passenger ${i} Error: The id expiration date entered is invalid!`)
+      }
+      else{
+        alert("The card expiration date entered is invalid"); 
+      }
       error++; 
     }
   }
   else if(opt == 3){
     if(value.length > 10 || value.length < 8){ // id must be max 10 digits 
-      alert("The ID number entered is invalid!"); 
+      alert(`Passenger ${i} Error: The ID number entered is invalid!`); 
       error++;
     }
   }
   else if(opt == 4){
     if(value.length > 12 || value.length < 8){
-      alert("The card number entered is invalid!");
+      alert(`The card number entered is invalid!`);
       error++;  
     }
   }
   else if(opt == 5){
     if(value.length != 10){
-      alert("The contact phone number entered is invalid!");
+      alert(`The contact number entered is invalid!`);
       error++;  
     }
   }
@@ -275,23 +298,44 @@ function verify(container, value, opt){
     container.style["border"] = "3px solid orange "; 
     error++; 
   }
-
-
   return error; 
 }
 
+let ans = "";
 
-
-
-async function submit(){
+const setans = (data) => {
+  ans = data; 
+}
+async function post_booking(){
   try {
-      //insert into booking (now date, book_ref, class, STATUS, no_tickets)
-      //insert into passenger
-      //insert into ticket 
+    const tickets = parseInt(localStorage.getItem("no_ticket").replace(/['"$]+/g, '')); 
+    const body = {trip_no: 1, no_ticket: tickets, pass: passgs, cont: contact, pay: payment}; 
+    const response = await fetch(`http://localhost:1585/booking`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).then((response) => response.json())
+    .then((responseJSON) => {
+      if( responseJSON == "success"){
+        alert("Submitted !")
+        location.reload(); 
+        return false; 
+      }
+      else {
+        alert("Sorry, your transaction was unsuccesfull")
+        return true; 
+      }
+    }
+    );
 
-  }catch(err){
-    console.log(err.message); 
+  } catch (err) {
+    return alert("err:" + err.message); 
   }
+}
+
+
+function submit(){
+  return post_booking();
 }
 
 
@@ -300,9 +344,8 @@ async function submit(){
 function review() {
   var errors = 0; 
   var no_tick = parseInt(localStorage.getItem("no_ticket").replace(/['"$]+/g, '')); 
-  let passgs = []; 
+  passgs = []; 
   let pass_cont, prefix, fname, lname, DOB, id_no, nation, id_exp, passg; 
-
   //verify passenger input fields 
   for(var i = 1; i <= no_tick; i++){
     //Fetch Parent Container 
@@ -317,63 +360,68 @@ function review() {
     
     prefix_cont = pass_cont.querySelector("select"); 
     prefix = prefix_cont.value; 
-    errors += verify(prefix_cont, prefix, 0); 
+    errors += verify(prefix_cont, prefix, i, 0); 
 
     fname_cont = pass_cont.querySelector("#pass-fname"); 
     fname = fname_cont.value; 
-    errors += verify(fname_cont, fname, 0); 
+    errors += verify(fname_cont, fname, i, 0); 
 
     lname_cont = pass_cont.querySelector(`#pass-lname`) 
     lname = lname_cont.value; 
-    errors += verify(lname_cont, lname,0); 
+    errors += verify(lname_cont, lname,i, 0); 
 
     DOB_cont = pass_cont.querySelector(`#pass-dob`); 
     DOB = DOB_cont.value; 
-    errors += verify(DOB_cont, DOB, 1); 
+    errors += verify(DOB_cont, DOB, i, 1); 
 
 
     id_no_cont = pass_cont.querySelector(`#id-num`);
     id_no = id_no_cont.value; 
-    errors += verify(id_no_cont, id_no, 3); 
+    errors += verify(id_no_cont, id_no, i, 3); 
 
     nation_cont = pass_cont.querySelector(`#nationality`); 
     nation = nation_cont.value; 
-    errors += verify(nation_cont, nation, 0); 
+    errors += verify(nation_cont, nation,i, 0); 
 
     id_exp_cont = pass_cont.querySelector("#id-exp"); 
     id_exp = id_exp_cont.value; 
-    errors += verify(id_exp_cont, id_exp, 2); 
+    errors += verify(id_exp_cont, id_exp, i, 2); 
 
     passg = {prefix, fname, lname, DOB, id_no, nation, id_exp}; 
-    passgs.push(passg);
+    setpassgs(passg);
   }
   //Verify contact fields
   contact_cont = document.querySelector("#contact"); 
   ctname_cont = contact_cont.querySelector("#cont-name"); 
   ctname = ctname_cont.value; 
-  errors += verify(ctname_cont, ctname, 0);
+  errors += verify(ctname_cont, ctname,0, 0);
   ct_nom_cont = contact_cont.querySelector("#cont-num");  
   ct_nom = ct_nom_cont.value; 
-  errors += verify(ct_nom_cont, ct_nom, 5);
+  errors += verify(ct_nom_cont, ct_nom,0, 5);
   ct_email_cont = contact_cont.querySelector("#cont-email"); 
   ct_email = ct_email_cont.value; 
-  errors += verify(ct_email_cont, ct_email, 0);
+  errors += verify(ct_email_cont, ct_email,0, 0);
 
+  setcontact({ctname, ct_nom, ct_email}); 
   //Verify Payments fields 
   pay_cont = document.querySelector("#pay-container");
   cname_cont = pay_cont.querySelector("#card-name"); 
   cname = cname_cont.value; 
-  errors += verify(cname_cont, cname, 0);
+  errors += verify(cname_cont, cname, 0,0);
   c_nom_cont = pay_cont.querySelector("#card-num");  
   c_nom = c_nom_cont.value; 
-  errors += verify(c_nom_cont, c_nom, 4);
+  errors += verify(c_nom_cont, c_nom, 0,4);
   c_exp_cont = pay_cont.querySelector("#card-exp");
   c_exp = c_exp_cont.value; 
-  errors += verify(c_exp_cont, c_exp, 2);
-  if(errors != 0){
+  errors += verify(c_exp_cont, c_exp, 0, 2);
+
+  setpayment({cname, c_nom, c_exp}); 
+
+  
+  /*if(errors != 0){
     alert("Please fix highlighted fields");
     return false; 
-  }
+  }*/
   return submit(); 
 }
 
