@@ -10,7 +10,7 @@
     <!-- style file -->
     <link rel="stylesheet" href="index.css">
 
-    <title>Check In</title>
+    <title>Payment Lookup</title>
     <style>
         h2 {
             text-align: center;
@@ -23,38 +23,38 @@
 
     <!-- Title -->
     <div id="title">
-        <h2>Check In</h2>
+        <h2>Payment Lookup</h2>
     </div>
 
     <!-- Back button -->
-    <button class="btn-home" onclick="location.href = 'index.html'">Home</button>
+    <button class="btn-home" onclick="location.href = 'admin.html'">Return to Admin Panel</button>
 
     <!-- check in input box and button -->
     <div class="input-group mb-3" id="input-ticket">
-        <input type="text" class="form-control" placeholder="Enter Ticket Number" id="ticket-number">
+        <input type="text" class="form-control" placeholder="Enter Passenger's Book Ref" id="book-ref">
         <div class="input-group-append">
-            <button class="btn btn-primary" type="button" onclick="getPassengerInfo()">Check In</button>
+            <button class="btn btn-primary" type="button" onclick="getPassengerPayment()">Search</button>
         </div>
 
     </div>
     <!-- end of insert form -->
 
     <!-- dynamic table to display boarding pass -->
-    <table class="table mt-5 text-center" id="bpass-display" style="display:none;">
+    <table class="table mt-5 text-center" id="payment-display" style="display:none;">
         <thead>
             <tr>
-                <th>BOARDING PASS:</th>
+                <th>PAYMENT:</th>
             </tr>
             <tr>
-                <th>Ticket Number</th>
-                <th>Flight ID</th>
-                <th>Boarding Number</th>
-                <th>Seat Number</th>
-                <th>Checked Bags</th>
+                <th>Book Ref</th>
+                <th>Cost of Ticket (USD)</th>
+                <th># Tickets Purchased</th>
+                <th>Discount (USD)</th>
+                <th style="background-color: rgb(1, 158, 14);">Total</th>
             </tr>
         </thead>
         <!-- add boarding pass info in tbody by modying the HTML in main.js -->
-        <tbody id="boarding-pass">
+        <tbody id="payment-table">
         </tbody>
     </table>
     <!-- End of dynamic table -->
@@ -63,35 +63,15 @@
     <table class="error-message" id="error-display" style="display:none;">
         <thead>
             <tr>
-                <th>Error: Invalid ticket number, please try again.</th>
+                <th>Error: Invalid book ref, please try again.</th>
             </tr>
         </thead>
     </table>
     <!-- End of dynamic table -->
 
-    <!-- the popup modal can be used to show boarding pass in a better way -->
-    <div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="edit-todo-label">Edit Description</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-                </div>
-                <input type="text" class="form-control modal-body" id="edited-description">
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="save-edit-description">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end of model -->
-
 </body>
 
-<script src="check.js"></script>
+<script src="payment.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

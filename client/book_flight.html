@@ -1,29 +1,59 @@
-
 <html lang="en">
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Booking</title>
-        <link rel = "stylesheet" href = "index.css">
-    </head>
-    <body>
-        <h3> Book your flight </h3>
-        <!---Browse Flights-->
-        <div class = "browse_flights">
-            <button class="search_btn" type="button" onclick="search()">Search</button>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <h2> Book your flight </h2>
+
+    <!---Browse Flights-->
+
+    <div class="container">
+        <h4> Search Available Flights </h4>
+        <div class="select-box">
+            <div class="options-container" id="o-options-container">
+            </div>
+            <div class="selected" id="o-selected">
+                Origin
+            </div>
         </div>
-
-
-        <table class="table mt-5 text-center" id="todo-list">
-            <thead>
-              <tr>
-                <th>Origin</th>
-              </tr>
-            </thead>
+        <div class="select-box">
+            <input class="input-box" type="date" placeholder="mm-dd-yyyy" id="d_date">
+        </div>
+        <div class="select-box">
+            <div class="options-container" id="d-options-container">
+            </div>
+            <div class="selected" id="d-selected">
+                Destination
+            </div>
+        </div>
+        <div class="select-box">
+            <input class="input-box" type="date" placeholder="mm-dd-yyyy" id="a_date">
+        </div>
+        <div class="select-box">
+            <input class="input-box" type="number" placeholder="No Tickets" id="s_no_ticket">
+            <button class="btn-book-search" type="button" onclick="search()">Search</button>
+        </div>
+    </div>
+    <div class="container">
+        <h4> Browse Available Flights </h4>
+        <input class="input-box" type="number" placeholder="No Tickets" id="b_no_ticket">
+        <button class="btn-book-search" type="button" onclick="browse()">Browse</button>
+        <table class=" " id="flights-list">
             <!-- add todos in tbody by modying the HTML in main.js -->
             <tbody id="flights-table">
             </tbody>
-          </table>
-    </body>
-  <script src="book.js"></script>
+        </table>
+    </div>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="location.href = 'index.html'"> Home</button>
+    </div>
+
+</body>
+
+<script src="book.js"></script>
 
 </html>
