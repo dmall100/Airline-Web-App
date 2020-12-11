@@ -213,7 +213,7 @@ app.get('/list_flights/:id', async(req, res) => {
 app.get('/check_in/:num', async(req, res) => {
     try {
         const { num } = req.params;
-        const getboardingpass = await pool.query(`
+        const getPassTick = await pool.query(`
             SELECT * 
             FROM ticket T
             JOIN 
@@ -221,16 +221,16 @@ app.get('/check_in/:num', async(req, res) => {
             ON P.passenger_id = T.passenger_id
             WHERE ticket_no = '${num}';
         `);
-        res.json(getboardingpass.rows);
+        res.json(getPassTick.rows);
 
         // Write to query.sql
-        var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
+        /*var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
         stream.write(`
         SELECT * 
         FROM boarding_passes 
         WHERE ticket_no = '${num}';\n
         `);
-        stream.end();
+        stream.end();*/
     } catch (err) {
         console.log(err.message);
     }
