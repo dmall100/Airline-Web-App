@@ -215,7 +215,10 @@ app.get('/check_in/:num', async(req, res) => {
         const { num } = req.params;
         const getboardingpass = await pool.query(`
             SELECT * 
-            FROM boarding_passes 
+            FROM ticket T
+            JOIN 
+            passenger P 
+            ON P.passenger_id = T.passenger_id
             WHERE ticket_no = '${num}';
         `);
         res.json(getboardingpass.rows);
@@ -273,7 +276,7 @@ app.post('/admin_add_flight', async(req, res) => {
         console.log("committed");
 
         // Write to transaction.sql
-        var stream = fs.createWriteStream("../../transaction.sql/", { flags: 'a' });
+        /*var stream = fs.createWriteStream("../../transaction.sql/", { flags: 'a' });
         stream.write(`START TRANSACTION; \nINSERT INTO flights VALUES(
             ${flight_id}, 
             '${flight_no}', 
@@ -285,7 +288,7 @@ app.post('/admin_add_flight', async(req, res) => {
             '${aircraft_code}', 
             ${seats_avail}, 
             ${seats_booked}) returning *;\nCOMMIT;\n`);
-        stream.end();
+        stream.end();*/
     } catch (err) {
         // Rollback if incorrect input is given.
         await pool.query(`ROLLBACK`)
