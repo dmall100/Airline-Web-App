@@ -449,6 +449,7 @@ function cost_onload(){
   const flightinfo = document.querySelector(".flight-container");
 
   flightinfo.innerHTML = `
+  <div class = "flight-bg">
   <div id = "city" class = "flight-info" > 
   ${d_city}
   </div>
@@ -468,7 +469,11 @@ function cost_onload(){
   ${a_date.toUTCString()}
   <div id = "city" class = "flight-info"> 
   ${a_city}
-  </div>`;
+  </div>
+  
+  
+  </div>
+ `;
 
   var no_tick = parseInt(localStorage.getItem("no_ticket").replace(/['"$]+/g, '')); 
 

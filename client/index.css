@@ -138,17 +138,33 @@ display: none;
 }
 .flight-container {
     top: 0; 
-    padding: 20px;
+    padding: 30px;
     background-color: #a90000;
     text-align: center;
+    border: 3px solid #a21a1a; 
+}
+.flight-bg {
+    background-color: #e3c5c5; 
+    padding: 2%; 
+
+
 }
 .flight-info {
-
+   
     display: inline;
     color:  #ffffff;
-    font-size: 18px;
+    font-size: 12px;
     font-weight: bolder;
-    padding: 5%; 
+    margin: 1%; 
+    margin-right: 2%;
+}
+
+ #date {
+    color:rgb(50, 48, 48);
+}
+#city {
+    font-size: 18px;
+    color:   #0a334c; 
 }
 
 
@@ -271,10 +287,11 @@ display: none;
     margin-bottom: 10px;
     margin-top: 100px;
     text-align: center;
-    
+    min-height: 300px;
 }
 
 .container2 {
+    
     border: 6px solid #094d81;
     background-color:  #035080;
     display: list-item;
@@ -311,4 +328,37 @@ img{
 .success-message th {
     font: bold 18px/1.1em Arial, Helvetica, sans-serif;
     color: rgb(18, 135, 18);
+}
+
+.home-cont {
+    display: flex;
+    justify-content: center;
+}
+.home-tab {
+    background-image: url("./admin-control.jpg");
+ 
+    background-position-x: center;
+    background-position-y: center;
+    display: inline;
+    padding: 8%; 
+    margin: 2%; 
+    border: 1px solid #424242; 
+}
+
+#check-in {
+    background-image: url("./check_in.jpg");
+    background-size: 390px;
+
+}
+
+#book {
+    background-image: url("./travel-button.jpeg");
+    background-size: 390px;
+
+
+}
+a{
+    color: white; 
+    background-color: #034374;
+    size: 30%
 }
