@@ -1,5 +1,7 @@
-// Retrieve payment from user specified in input
-let payment = []
+let payment = []; 
+const tick_price = 700; 
+const tax = 6.25/100; 
+let discounts = 0; 
 
 const setPayment = (data) => {
     payment = data;
@@ -32,6 +34,11 @@ async function getPassengerPayment() {
     }
 }
 
+
+function calc_total(no_tick, discounts){
+  let tick_prices = no_tick * tick_price; 
+  return tick_prices + (tax*tick_price) - discounts; 
+}
 // function to display boarding pass
 const displayPayment = () => {
     const paymentTable = document.querySelector('#payment-table');
@@ -44,7 +51,7 @@ const displayPayment = () => {
         <th>${paymentInfo.amount_per_tick}</th>
         <th>${paymentInfo.num_tickets}</th>
         <th>${paymentInfo.discount}</th>
-        <th>${paymentInfo.total_amount}</th>
+        <th>${calc_total(paymentInfo.num_tickets, paymentInfo.discount)}</th>
     </tr>`;
     })
     paymentTable.innerHTML = tableHTML;

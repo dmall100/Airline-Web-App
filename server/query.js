@@ -62,6 +62,31 @@ module.exports = {
       WHERE seats_available >= $1 ) K1
     ON K1.flight_id = T.flight_id2
     `,
+
+    GetOneWay : `SELECT trip_no, flight_id1,  f1_scheduled_departure, f1_departure_city, f1_scheduled_arrival, f1_arrival_city FROM trips T
+    JOIN 
+    (SELECT *, scheduled_departure as f1_scheduled_departure,scheduled_arrival as f1_scheduled_arrival , lD.city as f1_departure_city, lA.city as f1_arrival_city
+      FROM 
+      (
+        SELECT *, A.city_id AS f1_a_city_id, D.city_id AS f1_d_city_id 
+        FROM flights AS F
+        INNER JOIN 
+        airport AS D
+        on F.departure_airport = D.airport_code
+        INNER JOIN
+        airport As A
+        on arrival_airport = A.airport_code
+      ) B
+      INNER JOIN 
+      location AS lD
+      on B.f1_d_city_id = lD.city_id
+      INNER JOIN 
+      location AS lA
+      on B.f1_a_city_id = lA.city_id
+      WHERE seats_available >= $1 ) K
+    ON K.flight_id = T.flight_id1`, 
+
+
     queryGetTrip:`SELECT trip_no, flight_id1,  f1_scheduled_departure, f1_departure_city, f1_d_city_id, f1_scheduled_arrival, f1_arrival_city, f1_a_city_id, flight_id2, f2_scheduled_departure, f2_departure_city, f2_d_city_id, f2_scheduled_arrival, f2_arrival_city, f2_a_city_id FROM trips T
     JOIN 
     (SELECT *,  scheduled_departure as f1_scheduled_departure,scheduled_arrival as f1_scheduled_arrival , lD.city as f1_departure_city, lA.city as f1_arrival_city

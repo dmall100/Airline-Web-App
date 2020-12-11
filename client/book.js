@@ -70,8 +70,8 @@ const setflights= (data) => {
 set_world_list();
 function set_world_list() {
   async function GetWorld(){
-    try{
-      const response = await fetch(`http://localhost:1585/world_list`);
+    try{ 
+      const response = await fetch(`http://localhost:1385/world_list`);
       const jsonData = await response.json();
       setworld(jsonData);
       setoptions('d');
@@ -144,18 +144,23 @@ function set_world_list() {
 }
 
 
+// Use ticket number from input box to get boarding pass info
 
 
-async function browse() {
+function calc_total(no_tick, discounts){
+  let tick_prices = no_tick * tick_price; 
+  return tick_prices + (tax*tick_price) - discounts; 
+}
+
+async function oneWay() {
   const id = document.querySelector("#b_no_ticket").value;
   if(id <= 0){
     alert("Please enter a valid number of tickets");
     return false; 
   }
   try {
-    const response = await fetch(`http://localhost:1585/flights/${id}`);
+    const response = await fetch(`http://localhost:1385/flights/${id}`);
     const jsonData = await response.json();
-    set_no_ticket(id); 
     setflights(jsonData);
     displayflights();
     return false; 
@@ -163,6 +168,24 @@ async function browse() {
     console.log(err.message);
   }
 }
+async function browse() {
+  const id = document.querySelector("#b_no_ticket").value;
+  if(id <= 0){
+    alert("Please enter a valid number of tickets");
+    return false; 
+  }
+  try {
+    const response = await fetch(`http://localhost:1385/trips/${id}`);
+    const jsonData = await response.json();
+    set_no_ticket(id); 
+    setflights(jsonData);
+    displayflights();
+    oneWay();
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
 
 
 async function search() {
@@ -176,7 +199,7 @@ async function search() {
       alert("Please enter a valid number of tickets");
       return false; 
     }
-    const response = await fetch(`http://localhost:1585/flights/${id}/${d_city}-${a_city}`);
+    const response = await fetch(`http://localhost:1385/flights/${id}/${d_city}-${a_city}`);
     const jsonData = await response.json();
     set_no_ticket(id); 
     setflights(jsonData);
@@ -216,25 +239,43 @@ function displayflights(){
   {
     let tableHTML = "";
     flights.map(flight =>{
-      tableHTML +=
-      
-      `<div  >
-      <tr class = "flight-row" >
-      <th  id = "trip_no" >${flight.trip_no}</th>
-      <th  id = "d_city" >${flight.f1_departure_city}</th>
-      <th  id = "d_date"> ${new Date(flight.f1_scheduled_departure).toUTCString()}</th>
-      <th  id = "c_a_date"> ${new Date(flight.f1_scheduled_arrival).toUTCString()}</th>
-      <th id = "c_city" >${flight.f1_arrival_city}</th>
-      <th  id = "c_d_date"> ${new Date(flight.f2_scheduled_departure).toUTCString()}</th>
-      <th  id = "a_date"> ${new Date(flight.f2_scheduled_arrival).toUTCString()}</th>
-      <th id = "a_city" >${flight.f2_arrival_city}</th>
-      <th id = "price" > $${tick_price}</th>
-      <th> <button id = "select-btn" class = "btn-book-search"> select </button></th>
-      </tr> 
-      </div>`;
+      if(flight.f2_arrival_city) {
+        tableHTML +=
+        `<div  >
+        <tr class = "flight-row" >
+        <th  id = "trip_no" >${flight.trip_no}</th>
+        <th  id = "d_city" >${flight.f1_departure_city}</th>
+        <th  id = "d_date"> ${new Date(flight.f1_scheduled_departure).toUTCString()}</th>
+        <th  id = "c_a_date"> ${new Date(flight.f1_scheduled_arrival).toUTCString()}</th>
+        <th id = "c_city" >${flight.f1_arrival_city}</th>
+        <th  id = "c_d_date"> ${new Date(flight.f2_scheduled_departure).toUTCString()}</th>
+        <th  id = "a_date"> ${new Date(flight.f2_scheduled_arrival).toUTCString()}</th>
+        <th id = "a_city" >${flight.f2_arrival_city}</th>
+        <th id = "price" > $${tick_price}</th>
+        <th> <button id = "select-btn" class = "btn-book-search"> select </button></th>
+        </tr> 
+        </div>`;
+      }
+      else{
+        tableHTML +=
+        `<div  >
+        <tr class = "flight-row" >
+        <th  id = "trip_no" >${flight.trip_no}</th>
+        <th  id = "d_city" >${flight.f1_departure_city}</th>
+        <th  id = "d_date"> ${new Date(flight.f1_scheduled_departure).toUTCString()}</th>
+        <th  id = "c_d_date"> </th>
+        <th  id = "a_date"> </th>
+        <th id = "a_city" ></th>
+        <th  id = "c_a_date"> ${new Date(flight.f1_scheduled_arrival).toUTCString()}</th>
+        <th id = "c_city" >${flight.f1_arrival_city}</th>
+        <th id = "price" > $${tick_price}</th>
+        <th> <button id = "select-btn" class = "btn-book-search"> select </button></th>`
+
+      }
+
       
     });
-    flightsTable.innerHTML = tableHTML; 
+    flightsTable.innerHTML += tableHTML; 
     add_cust_event();
     
   }
@@ -316,8 +357,9 @@ function confirmation() {
 async function post_booking(){
   try {
     const tickets = parseInt(localStorage.getItem("no_ticket").replace(/['"$]+/g, '')); 
-    const body = {trip_no: 1, no_ticket: tickets, pass: passgs, cont: contact, pay: payment}; 
-    const response = await fetch(`http://localhost:1585/booking`, {
+    const trip_no = parseInt(localStorage.getItem("trip_no").replace(/['"$]+/g, '')); 
+    const body = {trip_no: trip_no, no_ticket: tickets, pass: passgs, cont: contact, pay: payment}; 
+    const response = await fetch(`http://localhost:1385/booking`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
@@ -432,10 +474,7 @@ function review() {
   return submit(); 
 }
 
-function calc_total(no_tick, discounts){
-  let tick_prices = no_tick * tick_price; 
-  return tick_prices + (tax*tick_price) - discounts; 
-}
+
 
 function cost_onload(){
   const a_city = localStorage.getItem("a_city").replace(/['"$]+/g, ''); 

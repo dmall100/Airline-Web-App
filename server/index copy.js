@@ -4,9 +4,12 @@ const cors = require('cors');
 const pool = require('./db');
 const transactions = require('./transaction'); 
 const query = require('./query'); 
-let index = 2981;  
-var async = require('async'); 
-const { response } = require('express');
+let index = 0; 
+const fs = require('fs');
+
+fs.writeFile('../../query.sql/', '', function() { console.log('query.sql cleaned and ready') });
+fs.writeFile('../../transaction.sql/', '', function() { console.log('transaction.sql cleaned and ready') });
+
 const inc_index = () => {
   index = index + 1;
 }

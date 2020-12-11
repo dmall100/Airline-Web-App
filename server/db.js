@@ -7,8 +7,8 @@ const Pool = require('pg').Pool;
 
 const pool = new Pool({
   host: 'code.cs.uh.edu',
-  user: 'cosc0163',
-  password: '1576316MD',
+  user: 'cosc0118',
+  password: '1540446AL',
   port: 5432,
   database: 'COSC3380'
 });
