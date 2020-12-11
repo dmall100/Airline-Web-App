@@ -1,7 +1,7 @@
 // assign seats to customer and ask whether they would like a meal
 let list_seats = []
 let boarding_pass = []
-
+let trip_no = 1; 
 const setSeats = (data) => {
     list_seats = data;
 }
@@ -10,6 +10,23 @@ const setBoardingPass = (data1) => {
     boarding_pass = data1;
 }
 
+const setTripno = (data) => {
+    trip_no = data; 
+}
+
+async function getFlightid() {
+    try{    
+        const response = await fetch(`http://localhost:1385/${trip_no}`);
+        const jsonData = await response.json();
+        
+        setFlightid(jsonData[0].flight_id1); 
+        return insert_boarding(); 
+
+
+    }catch(err){
+        console.log(err.message); 
+    }
+}
 // Use ticket number from input box to get boarding pass info
 async function getPassengerInfo() {
 
@@ -26,9 +43,9 @@ async function getPassengerInfo() {
             document.getElementById("bpass-display").style.display = "none";
             document.getElementById("error-display").style.display = "block";
         }
-
-        console.log(Object.keys(jsonData).length);
-
+        setTripno(jsonData[0].trip_no); 
+        getFlightid(jsonData[0].trip_no); 
+        setFlightid(); 
         setBoardingPass(jsonData);
         displayBoardingPass();
 
@@ -47,12 +64,16 @@ const displayBoardingPass = () => {
     let tableHTML = "";
     boarding_pass.map(passInfo => {
         tableHTML +=
-            `<th>${passInfo.ticket_no}</th>
+        `<th>${passInfo.trip_no}</th>
         <th>${passInfo.flight_id}</th>
-        <th>${passInfo.boarding_no}</th>
-        <th>${passInfo.seat_no}</th>
-        <th>${passInfo.checked_bags}</th>
+        <th>${passInfo.passenger_name}</th>
+        <th>${passInfo.passenger_id}</th>
+        <th>${passInfo.passenger_dob}</th>
+        <th><input class = "input-box" id = "seat-no"></input></th>
+        <th><input class = "input-box" id = "baggage-no" type = "number"></input></th>
     </tr>`;
     })
-    bpassTable.innerHTML = tableHTML;
+    bpassTable.innerHTML = tableHTML 
+    document.innerHTML +=  `<button class = "nav-btn" > Board Me </button>`; 
+    ;
 }

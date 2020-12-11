@@ -98,15 +98,20 @@ function generate_ticket(pass_id, trip_no) {
     return "TR" + trip_no + pass_id.substr(pass_id.length - 4);
 }
 
+app.get('/:trip_id', async(req, res) => {
+    try {
+        const {trip_no} = pars.params; 
+        const flight = await pool.query(`SELECT flight_id1 FROM trips WHERE trip_no = $1`, [trip_no]); 
 
-const InsertPass = async(passgs) => {
-    for (pass of passgs) {
-        const ans = await pool.query(transactions.queryInsertPass, [pass.id_no, pass.prefix + pass.fname + pass.lname, new Date(pass_id.DOB), pass.nation]);
-        if (ans.length != 0) {
-            return ans;
-        }
+        res.json(flight.rows); 
+
+
+    }catch(err){
+        console.log(err.message); 
     }
-}
+
+}); 
+
 
 app.post('/booking', async(req, res) => {
     try {
