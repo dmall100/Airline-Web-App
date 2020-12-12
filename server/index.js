@@ -3,8 +3,8 @@ const app = express();
 const cors = require('cors');
 const pool = require('./db');
 const fs = require('fs');
-/*fs.writeFile('../../query.sql/', '', function() { console.log('query.sql cleaned and ready') });
-fs.writeFile('../../transaction.sql/', '', function() { console.log('transaction.sql cleaned and ready') });*/
+fs.writeFile('../query.sql', '', function() { console.log('query.sql cleaned and ready') });
+fs.writeFile('../transaction.sql', '', function() { console.log('transaction.sql cleaned and ready') });
 const transactions = require('./transaction');
 const query = require('./query');
 let index = 2; 
@@ -100,7 +100,7 @@ function generate_ticket(pass_id, trip_no) {
 
 app.get('/:trip_id', async(req, res) => {
     try {
-        const {trip_no} = pars.params; 
+        const {trip_no} = req.params; 
         const flight = await pool.query(`SELECT flight_id1 FROM trips WHERE trip_no = $1`, [trip_no]); 
 
         res.json(flight.rows); 
@@ -169,13 +169,13 @@ app.post('/booking', async(req, res) => {
 //get all flights
 app.get('/list_flights', async(req, res) => {
     try {
-        const getflights = await pool.query(`SELECT * FROM flights WHERE seats_available > 0 ORDER BY flight_id;`);
+        const getflights = await pool.query(`SELECT * FROM flights WHERE seats_available >= 0 ORDER BY flight_id;`);
         res.json(getflights.rows);
 
         // Write to query.sql
-        /*var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
+        var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
         stream.write(`SELECT * FROM flights WHERE seats_available > 0 ORDER BY flight_id;\n`);
-        stream.end();*/
+        stream.end();
     } catch (err) {
         console.log(err.message);
     }
@@ -197,7 +197,7 @@ app.get('/list_flights/:id', async(req, res) => {
         res.json(getpassengers.rows);
 
         // Write to query.sql
-        /*var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
+        var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
         stream.write(`
             SELECT passenger_name, seat_no 
             FROM ticket a 
@@ -207,7 +207,7 @@ app.get('/list_flights/:id', async(req, res) => {
             flights c 
             WHERE b.flight_id=${id};\n
         `);
-        stream.end();*/
+        stream.end();
     } catch (err) {
         console.log(err.message);
     }
@@ -229,13 +229,13 @@ app.get('/check_in/:num', async(req, res) => {
         res.json(getPassTick.rows);
 
         // Write to query.sql
-        /*var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
+        var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
         stream.write(`
         SELECT * 
         FROM boarding_passes 
         WHERE ticket_no = '${num}';\n
         `);
-        stream.end();*/
+        stream.end();
     } catch (err) {
         console.log(err.message);
     }
@@ -281,7 +281,7 @@ app.post('/admin_add_flight', async(req, res) => {
         console.log("committed");
 
         // Write to transaction.sql
-        /*var stream = fs.createWriteStream("../../transaction.sql/", { flags: 'a' });
+        var stream = fs.createWriteStream("../../transaction.sql/", { flags: 'a' });
         stream.write(`START TRANSACTION; \nINSERT INTO flights VALUES(
             ${flight_id}, 
             '${flight_no}', 
@@ -293,7 +293,7 @@ app.post('/admin_add_flight', async(req, res) => {
             '${aircraft_code}', 
             ${seats_avail}, 
             ${seats_booked}) returning *;\nCOMMIT;\n`);
-        stream.end();*/
+        stream.end();
     } catch (err) {
         // Rollback if incorrect input is given.
         await pool.query(`ROLLBACK`)
@@ -316,13 +316,13 @@ app.get('/admin_payment/:ref', async(req, res) => {
         res.json(getpayment.rows);
 
         // Write to query.sql
-        /*var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
+        var stream = fs.createWriteStream("../../query.sql/", { flags: 'a' });
         stream.write(`SELECT book_ref, amount_per_tick, num_tickets, discount, total amount 
         FROM payment a 
         NATURAL JOIN 
         bookings b 
         WHERE a.book_ref='${ref}';\n`);
-        stream.end();*/
+        stream.end();
     } catch (err) {
         console.log(err.message);
     }

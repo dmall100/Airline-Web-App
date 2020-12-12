@@ -1,5 +1,6 @@
 let list_flights = []
 let list_passengers = []
+selectFlights();
 
 const setFlights = (data) => {
     list_flights = data;
@@ -8,7 +9,7 @@ const setFlights = (data) => {
 const setPassengers = (data1) => {
     list_passengers = data1;
 }
-
+ 
 // function to display flights
 const displayFlights = () => {
     const flightsTable = document.querySelector('#flights-table');
@@ -48,7 +49,6 @@ const displayPassengers = () => {
     passengersTable.innerHTML = tableHTML1;
 }
 
-selectFlights();
 
 // select all the flights
 async function selectFlights() {

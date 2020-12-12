@@ -1,7 +1,7 @@
 // assign seats to customer and ask whether they would like a meal
 let list_seats = []
 let boarding_pass = []
-let trip_no = 1; 
+let trip_no = []; 
 const setSeats = (data) => {
     list_seats = data;
 }

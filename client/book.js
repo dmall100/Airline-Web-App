@@ -162,7 +162,7 @@ async function oneWay() {
     const response = await fetch(`http://localhost:1385/flights/${id}`);
     const jsonData = await response.json();
     setflights(jsonData);
-    displayflights();
+    displayflights(2);
     return false; 
   } catch (err) {
     console.log(err.message);
@@ -179,7 +179,7 @@ async function browse() {
     const jsonData = await response.json();
     set_no_ticket(id); 
     setflights(jsonData);
-    displayflights();
+    displayflights(1);
     oneWay();
   } catch (err) {
     console.log(err.message);
@@ -203,7 +203,7 @@ async function search() {
     const jsonData = await response.json();
     set_no_ticket(id); 
     setflights(jsonData);
-    displayflights();
+    displayflights(1);
     return false; 
   } catch (err) {
     console.log(err.message);
@@ -233,7 +233,7 @@ function add_cust_event(){
   return false;
 }
 
-function displayflights(){
+function displayflights(opt){
   const flightsTable = document.querySelector('#flights-table');
   if(flights.length > 0)
   {
@@ -275,7 +275,12 @@ function displayflights(){
 
       
     });
-    flightsTable.innerHTML += tableHTML; 
+    if(opt == 1){
+      flightsTable.innerHTML = tableHTML; 
+    }
+    else{
+      flightsTable.innerHTML += tableHTML; 
+    }
     add_cust_event();
     
   }
@@ -352,6 +357,7 @@ function confirmation() {
   confirm_text.innerHTML = `<p>
     <h2>Your booking has been confirmed!</h2>
     <span> bookref: ${book_ref}</span>
+    <span> Ticket_no:  TR + last 4 digits of id </span>
   </p>`
 }
 async function post_booking(){
